@@ -17,7 +17,6 @@ namespace Game.SistemaAI
 
         public override void OnAction(SAIController controller)
         {
-
             controller.navAgent.stoppingDistance = distanciaStop;
             controller.navAgent.destination = destino;
 

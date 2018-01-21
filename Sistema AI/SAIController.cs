@@ -25,18 +25,18 @@ namespace Game.SistemaAI
         
             navAgent = GetComponent<NavMeshAgent>();
             motor = GetComponent<Motor>();
-            character = GetComponent<ItemHolder>().item.GetComponent<Character>();
 
         }
 
 
         void Start()
         {
+            character = GetComponent<ItemHolder>().item.GetComponent<Character>();
             motor.MotorStart();
             navAgent.updatePosition = false;
             navAgent.updateRotation = false;
 
-            inimigo = GameObject.FindGameObjectWithTag("Player").GetComponent<Character>();
+            inimigo = GameObject.FindGameObjectWithTag("Player").GetComponent<ItemHolder>().item.GetComponent<Character>();
 
             ai.root.OnActionEnter(this);
         }
@@ -44,15 +44,11 @@ namespace Game.SistemaAI
 
         void Update()
         {
-            
-            ((CCMotor)motor).Alvo = (inimigo) ? inimigo.item.holder.transform.position : transform.forward;
-
+            ((CCMotor)motor).Target = inimigo ? inimigo.item.holder.transform.position : transform.forward;
             Vector3 input = navAgent.desiredVelocity / navAgent.speed;
-
             motor.input = (input.magnitude > 1) ? input.normalized : input;
 
             navAgent.nextPosition = transform.position;
-
         }
 
         private void OnDestroy()

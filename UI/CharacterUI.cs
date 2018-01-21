@@ -10,19 +10,21 @@ public class CharacterUI : MonoBehaviour
     public Image barraDeStamina;
     public Text textoStamina;
 
-    [HideInInspector]
     public Character character;
 
     void Update()
     {
-        a(barraDeDanos, textoDanos, "Danos",character.danificavel.danos, character.danificavel.danosMax, true);
-        a(barraDeStamina, textoStamina, "Stamina",character.stamina, character.staminaMax, false);
+        if (!character) return;
+
+        Barra(barraDeDanos, textoDanos, "Life", character.danificavel.danificavel.life.value, character.danificavel.danificavel.life.maxValue, false);
+        Barra(barraDeStamina, textoStamina, "Stamina", character.stamina.value, character.stamina.maxValue, false);
     }
 
 
-    void a(Image barraFill, Text texto, string nome, float valor, float valorMax, bool inverter)
+    void Barra(Image barraFill, Text texto, string nome, float valor, float valorMax, bool inverter)
     {
-        barraFill.fillAmount = (inverter) ? 1 - valor / valorMax : valor / valorMax;
+        float v = valor / valorMax;
+        barraFill.fillAmount = inverter ? 1 - v : v;
 
         texto.text = nome + ": " + (inverter ? valorMax - valor : valor) + "/" + valorMax;
     }

@@ -15,7 +15,6 @@ namespace Game.SistemaInventario
         public Item Default;
 
 
-
         public override void AoDuplicar()
         {
 

@@ -10,20 +10,7 @@ using UnityEditor;
 public struct Danos
 {
     public int danos;
-    //public List<float> multiplicadores = new List<float>();
 
-    //public int Dano
-    //{
-    //    get
-    //    {
-    //        float d = danos;
-
-    //        foreach (float m in multiplicadores)
-    //            d *= m;
-
-    //        return Mathf.FloorToInt(d);
-    //    }
-    //}
 
     public static Danos operator +(Danos A, Danos B)
     {

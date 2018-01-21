@@ -7,7 +7,7 @@ using UnityEditor;
 using Game;
 using Game.SistemaInventario;
 
-public class DanificavelItemComponente : ItemComponent, IExterior
+public class DanificavelItem : ItemComponent, IExterior
 {
     public Danificavel danificavel;
 
@@ -29,16 +29,17 @@ public class DanificavelItemComponente : ItemComponent, IExterior
 
         hitboxes = item.holder.GetHolderComponents<Hitbox>(hitboxesName.ToArray());
 
-        foreach(Hitbox h in hitboxes)
-            h.OnHitEnter += DarDanos;
+        foreach (Hitbox h in hitboxes) h.OnHitEnter += ReceberDanos;
+        
+        item.holder.StartCoroutine(danificavel.life.Variation());
 
     }
 
 
 
-    public void DarDanos(HitInfo info)
+    public void ReceberDanos(HitInfo info)
     {
-        danificavel.ReceberDanos(info.danos);
+        danificavel.ReceiveDamage(info.danos);
     }
 
 
@@ -46,7 +47,7 @@ public class DanificavelItemComponente : ItemComponent, IExterior
     void OnDestroy()
     {
         foreach (Hitbox h in hitboxes)
-            h.OnHitEnter -= DarDanos;
+            h.OnHitEnter -= ReceberDanos;
 
     }
 
@@ -60,13 +61,10 @@ public class DanificavelItemComponente : ItemComponent, IExterior
     {
         base.GuiParametros();
 
-        if(danificavel)
-            danificavel.Gui();
+        if(danificavel) danificavel.Gui();
 
-        if (exterior)
-            Exterior.GetComponentsNames<Hitbox>(exterior, ref size, hitboxesName);
-        else
-            exterior = item.GetComponent<Exterior>();
+        if (exterior) Exterior.GetComponentsNames<Hitbox>(exterior, ref size, hitboxesName);
+        else exterior = item.GetComponent<Exterior>();
 
     }
 #endif

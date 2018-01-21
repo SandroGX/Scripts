@@ -18,10 +18,10 @@ namespace Game.SistemaAI
         {
             switch (tipo)
             {
-                case Tipo.danos: aAvaliar = ai.character.danificavel.danos; break;
-                case Tipo.danos_Percentagem : aAvaliar = ((float)ai.character.danificavel.danos / (float)ai.character.danificavel.danosMax) * 100; break;
-                case Tipo.stamina: aAvaliar = ai.character.stamina; break;
-                case Tipo.stamina_Percentagem: aAvaliar = ((float)ai.character.stamina / (float)ai.character.staminaMax) * 100; break;
+                case Tipo.danos: aAvaliar = ai.character.danificavel.danificavel.life.value; break;
+                case Tipo.danos_Percentagem : aAvaliar = (ai.character.danificavel.danificavel.life.value / ai.character.danificavel.danificavel.life.maxValue) * 100; break;
+                case Tipo.stamina: aAvaliar = ai.character.stamina.value; break;
+                case Tipo.stamina_Percentagem: aAvaliar = (ai.character.stamina.value / ai.character.stamina.maxValue) * 100; break;
             }
 
             return base.Pontuar(ai);

@@ -10,26 +10,22 @@ using Game.SistemaInventario;
 [System.Serializable]
 public class Character : ItemComponent, IExterior
 {
-    public Danificavel danificavel;
+    public DanificavelItem danificavel;
 
-    public int desequilibrio, varDesequilibrio, desequilibrioMax, stamina, staminaVar, staminaMax;
+    public Statistic unbalance, stamina;
 
     public MotorEstado PerdaDeEquilibrio, Cair;
-
     Motor motor;
-    IEnumerator podeVar;
 
     public List<Character> amigo = new List<Character>();
     public List<Character> inimigo = new List<Character>();
 
-    public delegate void Morri(Character eu);
-    public event Morri morri;
-
-
 
     public override void AoDuplicar()
     {
-        danificavel = item.GetComponent<DanificavelItemComponente>().danificavel;
+        danificavel = item.GetComponent<DanificavelItem>();
+        unbalance = new Statistic(unbalance);
+        stamina = new Statistic(stamina);
     }
 
 
@@ -37,53 +33,11 @@ public class Character : ItemComponent, IExterior
     public void OnCriado()
     {
         motor = item.holder.gameObject.GetComponent<Motor>();
-        stamina = staminaMax;
-        item.holder.StartCoroutine(Variacao());
+        stamina = new Statistic(stamina);
+        unbalance = new Statistic(unbalance);
+        item.holder.StartCoroutine(stamina.Variation());
+        item.holder.StartCoroutine(unbalance.Variation());
     }
-
-
-
-    IEnumerator Variacao()
-    {
-        while (true)
-        {
-            danificavel.danos += danificavel.varDanos;
-            desequilibrio += varDesequilibrio;
-            stamina += staminaVar;
-
-            //Corrigir();
-
-            //Morte();
-
-            yield return new WaitForSeconds(1);
-        }
-
-    }
-
-
-
-    //public override void ReceberDanos(int danosAReceber)
-    //{
-
-    //    danos += danosAReceber;
-
-    //    desequilibrio += danosAReceber;
-
-    //    Corrigir();
-
-    //    if (Morte())
-    //        return;
-
-    //    if(desequilibrio >= desequilibrioMax)
-    //    {
-    //        //if (stamina <= staminaMax * .25f || danosAReceber >= desequilibrioMax)
-    //            motor.MudarEstado(Cair);
-    //        //else motor.MudarEstado(PerdaDeEquilibrio);
-
-    //        desequilibrio = 0;
-    //    }
-
-    //}
 
 
 #if UNITY_EDITOR
@@ -92,13 +46,15 @@ public class Character : ItemComponent, IExterior
     {
         base.GuiParametros();
 
-        staminaVar = EditorGUILayout.IntField("Stamina Var", staminaVar);
-        staminaMax = EditorGUILayout.IntField("Stamina Max", staminaMax);
+        EditorGUILayout.LabelField("Stamina");
+        stamina.Gui();
+        EditorGUILayout.LabelField("Unbalance");
+        unbalance.Gui();
 
         if (!danificavel)
         {
-            danificavel = item.GetComponent<DanificavelItemComponente>().danificavel;
-            EditorGUILayout.LabelField("Precisa de um componente do tipo DanificavelItemComponente");
+            EditorGUILayout.LabelField("Precisa de um componente do tipo DanificavelItem");
+            danificavel = item.GetComponent<DanificavelItem>();
         }
     }
 

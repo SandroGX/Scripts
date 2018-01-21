@@ -16,7 +16,7 @@ namespace Game.SistemaAI
 
         public override void OnActionEnter(SAIController controller)
         {
-            controller.motor.proximoEstado = estado;
+            controller.motor.nextState = estado;
 
             base.OnActionEnter(controller);
         }

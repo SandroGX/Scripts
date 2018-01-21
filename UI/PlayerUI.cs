@@ -7,7 +7,6 @@ using Game.SistemaInventario;
 public class PlayerUI : MonoBehaviour
 {
 
-    Character playerCharacter;
     public CharacterUI playerCharacterUI;
     public GameObject barra;
 
@@ -15,18 +14,15 @@ public class PlayerUI : MonoBehaviour
 
 	void Awake ()
     {
-        playerCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ItemHolder>().item.GetComponent<Character>();
-        playerCharacterUI.character = playerCharacter;
+        //playerCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<ItemHolder>().item.GetComponent<Character>();
+        //playerCharacterUI.character = playerCharacter;
     }
-	
-	
-	void Update ()
+
+
+    void Update()
     {
-        if (playerCharacterUI.character == null)
-        {
-            playerCharacter = GameObject.FindGameObjectWithTag("Player").GetComponent<Character>();
-            playerCharacterUI.character = playerCharacter;
-        }
+        if (GameManager.PLAYER != null && playerCharacterUI.character == null)
+            playerCharacterUI.character = GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();    
     }
 
 

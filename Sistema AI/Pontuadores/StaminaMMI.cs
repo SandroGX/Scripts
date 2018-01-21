@@ -13,7 +13,7 @@ namespace Game.SistemaAI
 
         public override float Pontuar(SAIController ai)
         {
-            aAvaliar = ai.character.stamina;
+            aAvaliar = ai.character.stamina.value;
 
             return base.Pontuar(ai);
         }

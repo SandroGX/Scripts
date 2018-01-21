@@ -8,51 +8,41 @@ using UnityEditor;
 [System.Serializable]
 public class Danificavel
 {
-    public int danos, danosMax, varDanos;
-
-    public event System.Action Destruido;
-
-
-
-    public virtual void ReceberDanos(Danos danosAReceber)
-    {
-        danos += danosAReceber.danos;
-
-        if (danos >= danosMax && Destruido != null)
-            Destruido();
-    }
-
-
+    public Statistic life = new Statistic();
 
     public static implicit operator bool(Danificavel danificavel)
     {
-        if (danificavel != null)
-            return true;
+        if (danificavel != null) return true;
         else return false;
     }
 
 
-
-    public Danificavel(Danificavel danificavel)
+    public void ReceiveDamage(Danos damage)
     {
-        this.danos = danificavel.danos;
-        this.danosMax = danificavel.danosMax;
-        this.varDanos = danificavel.varDanos;
+        life.Add(-damage.danos);
     }
 
-    public Danificavel(int danos, int danosMax, int varDanos)
+
+    public Danificavel(Statistic life)
     {
-        this.danos = danos;
-        this.danosMax = danosMax;
-        this.varDanos = varDanos;
+        this.life = new Statistic(life);
+    }
+
+    public Danificavel(Danificavel original)
+    {
+        this.life = new Statistic(original.life);
+    }
+
+    public Danificavel()
+    {
+        life = new Statistic();
     }
 
 
 #if UNITY_EDITOR
     public void Gui()
     {
-        danosMax = EditorGUILayout.IntField("Danos Max: ", danosMax);
-        varDanos = EditorGUILayout.IntField("Danos Var: ", varDanos);
+        life.Gui();
     }
 #endif
 }

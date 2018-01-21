@@ -8,11 +8,13 @@ namespace Game.SistemaMotor
     public class AnimEstado : MotorEstado
     {
         public Anim[] condicoes;
+        public MovimentoBasico movimento;
+        //MovimentoBasico m;
 
 
-        public override void OnAnimacaoEnd(Motor motor)
+        public override void OnAnimationEnd(Motor motor)
         {
-            motor.ProximoEstado();
+            motor.MudarEstado(motor.nextState);
         }
 
 
@@ -20,13 +22,31 @@ namespace Game.SistemaMotor
         {
             base.Construct(motor);
             PlayConditions(motor);
+            //m = movimento;
+        }
+
+
+        public override void ProcessMovement(Motor motor)
+        {
+            /*MotorEstado n = m.Transition(motor);
+            if (n != null)  m = n;*/ 
+            if(movimento) movimento.ProcessMovement(motor);
         }
 
 
         protected virtual void PlayConditions(Motor motor)
         {
-            foreach (Anim condicao in condicoes)
-                condicao.SetParam(motor.anim);
+            foreach (Anim condicao in condicoes) condicao.SetParam(motor.anim);
+        }
+
+        public override bool CanStay(Motor motor)
+        {
+            return movimento&&movimento.CanStay(motor) || !movimento;
+        }
+
+        public override MotorEstado Transition(Motor motor)
+        {
+            return null;
         }
     }
 }

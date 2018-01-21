@@ -20,21 +20,22 @@ namespace Game.SistemaMotor
         public float acelAngMax;
 
         public bool ignorarVelAnterior;
+        public AnimEstado anim;
 
-        public override void ProcessarMovimento(Motor motor)
+        
+        public override void ProcessMovement(Motor motor)
         {
-            float vel = motor.velocidade.magnitude / Time.fixedDeltaTime;
-            float velMinAt = (!ignorarVelAnterior && vel < velMin) ? motor.velocidade.magnitude : velMin;
-            float velMaxAt = (!ignorarVelAnterior && vel > velMax) ? motor.velocidade.magnitude : velMax;
+            float vel = motor.movementVelocity.magnitude / Time.fixedDeltaTime;
+            float velMinAt = (!ignorarVelAnterior && vel < velMin) ? motor.movementVelocity.magnitude : velMin;
+            float velMaxAt = (!ignorarVelAnterior && vel > velMax) ? motor.movementVelocity.magnitude : velMax;
 
             Vector3 velDes;
 
-            if (motor.input != Vector3.zero)
-                velDes = motor.input * velMaxAt;
-            else if(motor.velocidade != Vector3.zero) velDes = motor.velocidade.normalized * velMinAt;
+            if (motor.input != Vector3.zero) velDes = motor.input * velMaxAt;
+            else if(motor.movementVelocity != Vector3.zero) velDes = motor.movementVelocity.normalized * velMinAt;
             else velDes = motor.transform.forward * velMinAt;
 
-            motor.velocidade = MotorUtil.MovUniVar(motor.velocidade, velDes, velMinAt, velMaxAt, acelMin, acelMax, Time.fixedDeltaTime);
+            motor.velocity = motor.movementVelocity = MotorUtil.MovUniVar(motor.movementVelocity, velDes, velMinAt, velMaxAt, acelMin, acelMax, Time.fixedDeltaTime);
 
         }
 
@@ -44,6 +45,12 @@ namespace Game.SistemaMotor
             base.Construct(motor);
 
             MotorUtil.NavAgent(motor, this);
+        }
+
+
+        public override void OnAnimationEnd(Motor motor)
+        {
+            if(anim) anim.OnAnimationEnd(motor);
         }
     }
 }

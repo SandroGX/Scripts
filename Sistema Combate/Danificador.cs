@@ -11,6 +11,7 @@ using Game.SistemaInventario;
 public class Danificador : ItemComponent, IExterior, IAtivavel
 {
     public string Name { get { return name; } }
+    public bool isActive { get; set; }
 
     public Danos danosADar;
     public List<string> hitboxesName;
@@ -32,12 +33,15 @@ public class Danificador : ItemComponent, IExterior, IAtivavel
 
 
 
-    public void Ativar(bool ativo)
+    public void Activate(bool ativo)
     {
+        if (ativo == isActive) return;
+
+        isActive = ativo;
 
         foreach(Hitbox h in hitboxes)
         {
-            if(ativo)
+            if (ativo)
                 h.hit.danos += danosADar;
             else h.hit.danos -= danosADar;
 

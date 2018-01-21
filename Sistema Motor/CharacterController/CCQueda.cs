@@ -10,38 +10,29 @@ namespace Game.SistemaMotor
 
         public float velocidadeTerminal = 15;
 
-        public override void ProcessarMovimento(Motor motor)
+        public override void ProcessMovement(Motor motor)
         {
             CCMotor cMotor = (CCMotor)motor;
 
-            Vector3 g = Vector3.Project(motor.velocidade, cMotor.gravidadeDirecao);
+            base.ProcessMovement(motor);
 
-            motor.velocidade -= g;
-
-            base.ProcessarMovimento(motor);
-
-            motor.velocidade += MotorUtil.MovUniVar(g, cMotor.gravidadeDirecao * velocidadeTerminal, 1, velocidadeTerminal, 0, cMotor.Gravidade, Time.fixedDeltaTime);
+            motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, cMotor.gravity.normalized * velocidadeTerminal, 1, velocidadeTerminal, 0, cMotor.gravity.magnitude, Time.fixedDeltaTime);
 
         }
 
-
-        public override void Deconstruct(Motor motor)
+        public override void Construct(Motor motor)
         {
-            base.Deconstruct(motor);
+            base.Construct(motor);
 
-            CCMotor cMotor = (CCMotor)motor;
-
-            Vector3 i = Vector3.Project(motor.velocidade, cMotor.gravidadeDirecao);
-
-            motor.velocidade -= i;
+            motor.movementVelocity += motor.platformVelocity;
+            motor.platformVelocity = motor.movementAngVelocity = motor.platformAngVelocity = Vector3.zero;
         }
 
 
-        public override void Transicao(Motor motor)
+        public override bool CanStay(Motor motor)
         {
-            if (motor.NoChao())
-                motor.DefaultEstado();
+            return !((CCMotor)motor).isGrounded;
         }
-
+        
     }
 }

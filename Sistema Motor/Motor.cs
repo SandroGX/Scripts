@@ -21,23 +21,21 @@ namespace Game.SistemaMotor
         [HideInInspector]
         public Character character;
 
+        //[HideInInspector]
+        public Vector3 velocity, movementVelocity, platformVelocity, fallVelocity; //em metros/fixedUpdate
         [HideInInspector]
-        public Vector3 velocidade; //em metros/fixedUpdate
-        [HideInInspector]
-        public Vector3 velocidadeRotacional; //em angulos/fixedUpdate
+        public Vector3 angularVelocity, movementAngVelocity, platformAngVelocity; //em angulos/fixedUpdate
         [HideInInspector]
         public Vector3 input;
         [HideInInspector]
         public bool isStarted;
 
-        //public event Action animAcabou;
-
         public Dictionary<string, IAtivavel> ativaveis = new Dictionary<string, IAtivavel>();
 
-        public MotorEstado estadoAtual;
-        [HideInInspector]
-        public MotorEstado proximoEstado;
-        public MotorEstado defaultEstado;
+        public MotorEstado currentState;
+        public MotorEstado nextState;
+        [SerializeField]
+        public MotorEstado defaultState;
 
 
         protected virtual void Awake()
@@ -56,9 +54,8 @@ namespace Game.SistemaMotor
 
             isStarted = true;
 
-            estadoAtual = defaultEstado;
-        
-            estadoAtual.Construct(this);
+            currentState = defaultState;
+            currentState.Construct(this);
         }
 
 
@@ -70,55 +67,52 @@ namespace Game.SistemaMotor
 
         protected virtual void MotorUpdate()
         {
-            estadoAtual.Transicao(this);
-            estadoAtual.ProcessarMovimento(this);
+            MudarEstado(currentState.Transition(this));
+            currentState.ProcessMovement(this);
+            velocity = movementVelocity + platformVelocity + fallVelocity;
+            angularVelocity = movementAngVelocity + platformAngVelocity;
+            anim.SetFloat("Velocidade", velocity.magnitude / Time.fixedDeltaTime);
+            anim.SetFloat("Velocidade Angular", angularVelocity.y / Time.fixedDeltaTime);
+            anim.SetBool("C == N", currentState == nextState);
         }
 
 
-        public virtual bool NoChao() { return false; }
+        public virtual bool OnGround() { return false; }
 
 
-        public void MudarEstado(MotorEstado estado)
+        public void MudarEstado(MotorEstado state)
         {
-            if (estadoAtual != estado)
-            {
-                estadoAtual.Deconstruct(this);
-                estadoAtual = estado;
-                estadoAtual.Construct(this);
-            }
-        }
-
-
-        public void ProximoEstado()
-        {
-            if (proximoEstado && estadoAtual != proximoEstado)
-                MudarEstado(proximoEstado);
-
+            if (!state || currentState == state) return;
+            
+            currentState.Deconstruct(this);
+            currentState = state;
+            currentState.Construct(this);
+            MudarEstado(currentState.Transition(this));
         }
 
 
         public void DefaultEstado()
         {
-            proximoEstado = defaultEstado;
-            MudarEstado(defaultEstado);
+            nextState = defaultState;
+            MudarEstado(defaultState);
         }
 
 
         public void AnimacaoEnd()
         {
-            estadoAtual.OnAnimacaoEnd(this);
+            currentState.OnAnimationEnd(this);
         }
 
         
 
-        public void Ativar(string aAtivar)
+        public void Activate(string toActivate)
         {
-            ativaveis[aAtivar].Ativar(true);
+            ativaveis[toActivate].Activate(true);
         }
 
-        public void Desativar(string aDesativar)
+        public void Deactivate(string toDeactivate)
         {
-            ativaveis[aDesativar].Ativar(false);
+            ativaveis[toDeactivate].Activate(false);
         }
 
 
@@ -136,22 +130,16 @@ namespace Game.SistemaMotor
 
         public void AtivarTodosComNome(string aAtivar)
         {
-            GetAtivaveisComNome(aAtivar, x => ativaveis[x].Ativar(true));
+            GetAtivaveisComNome(aAtivar, x => ativaveis[x].Activate(true));
         }
 
 
 
         public void DesativarTodosComNome(string aDesativar)
         {
-            GetAtivaveisComNome(aDesativar, x => ativaveis[x].Ativar(false));
+            GetAtivaveisComNome(aDesativar, x => ativaveis[x].Activate(false));
 
         }
 
-
-
-        public void ModificarCharacter()
-        {
-            estadoAtual.ModificarCharacter(this);
-        }
     }
 }

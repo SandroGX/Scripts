@@ -10,15 +10,14 @@ public class AnimIncrs : AnimEstado
     public int max;
     Dictionary<Motor, int> rep = new Dictionary<Motor, int>();
 
-    public override void OnAnimacaoEnd(Motor motor)
+    public override void OnAnimationEnd(Motor motor)
     {
 
-        if (motor.proximoEstado == this)
-            PlayConditions(motor);
+        if (motor.nextState == this) PlayConditions(motor);
         else
         {
             rep.Remove(motor);
-            motor.ProximoEstado();
+            base.OnAnimationEnd(motor);
         }
     }
 
@@ -26,16 +25,13 @@ public class AnimIncrs : AnimEstado
 
     protected override void PlayConditions(Motor motor)
     {
-        if (!rep.ContainsKey(motor))
-            rep.Add(motor, 0);
+        if (!rep.ContainsKey(motor)) rep.Add(motor, 0);
 
         motor.anim.SetInteger(param, rep[motor]);
 
         base.PlayConditions(motor);
 
-        if (rep[motor] < max)
-            ++rep[motor];
-        else rep[motor] = 0;
+        if (++rep[motor] >= max) rep[motor] = 0;
     }
 
 }

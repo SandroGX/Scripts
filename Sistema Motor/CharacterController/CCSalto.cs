@@ -12,50 +12,30 @@ namespace Game.SistemaMotor
         public float aceleracaoXZ = 2;
         public int staminaVarInst;
        
-        public override void ProcessarMovimento(Motor motor)
+        public override void ProcessMovement(Motor motor)
         {
             CCMotor cMotor = (CCMotor)motor;
 
-            float saltoVelocidade = Mathf.Sqrt(-2 * -cMotor.Gravidade * saltoAltura);
+            float saltoVelocidade = Mathf.Sqrt(-2 * -cMotor.gravity.magnitude * saltoAltura);
 
-            Vector3 salto = -cMotor.gravidadeDirecao * saltoVelocidade;
+            motor.fallVelocity = -cMotor.gravity.normalized * saltoVelocidade * Time.fixedDeltaTime;
 
-            Vector3 impulso = Vector3.ProjectOnPlane(cMotor.input, cMotor.ChaoNormal) * aceleracaoXZ;
-
-            cMotor.velocidade = cMotor.velocidade + (salto + impulso) * Time.fixedDeltaTime;
+            motor.movementVelocity += Vector3.ProjectOnPlane(cMotor.input, cMotor.floorHit.normal) * aceleracaoXZ * Time.fixedDeltaTime;
                
-        }
-
-
-        public override void ModificarCharacter(Motor motor)
-        {
-            base.ModificarCharacter(motor);
-
-            motor.character.stamina -= staminaVarInst;
         }
 
 
         public override void Construct(Motor motor)
         {
-            base.Construct(motor);
-            ModificarCharacter(motor);
+            motor.movementVelocity += motor.platformVelocity;
+            motor.platformVelocity = motor.fallVelocity = motor.movementAngVelocity = motor.platformAngVelocity = Vector3.zero; 
+            motor.character.stamina.Add(-staminaVarInst);
         }
 
 
-        public override void Transicao(Motor motor)
+        public override bool CanStay(Motor motor)
         {
-            if (motor.character.stamina < staminaVarInst)
-            {
-                motor.DefaultEstado();
-                return;
-            }
-
-            if (!motor.NoChao())
-            {
-                motor.MudarEstado(((CCMotor)motor).queda);
-                return;
-            }
-
+            return ((CCMotor)motor).isGrounded && (motor.character.stamina.value >= staminaVarInst || motor.currentState == this); //&& canJump
         }
     }
 }

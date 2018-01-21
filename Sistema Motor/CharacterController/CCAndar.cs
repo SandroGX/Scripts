@@ -9,61 +9,50 @@ namespace Game.SistemaMotor
     public class CCAndar : MovimentoBasico
     {
         public int staminaVar;
+        public int staminaExit;
 
 
-        public override void ProcessarMovimento(Motor motor)
+        public override void ProcessMovement(Motor motor)
         {
-            base.ProcessarMovimento(motor);
-
             CCMotor cMotor = (CCMotor)motor;
 
+            //Vector3 gravity = Vector3.Cross(cMotor.gravity, cMotor.floorHit.normal).normalized * cMotor.gravity.magnitude * Mathf.Sin(Vector3.Angle(cMotor.gravity, cMotor.floorHit.normal));
+            //motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, )
 
-            //motor.transform.up = -cMotor.gravidadeDirecao.normalized;
+            Vector3 a = motor.platformVelocity;
+            motor.platformVelocity = cMotor.floorHit.rigidbody ? cMotor.floorHit.rigidbody.GetPointVelocity(cMotor.floorHit.point) * Time.fixedDeltaTime : Vector3.zero;
 
-            cMotor.velocidade = Vector3.ProjectOnPlane(motor.velocidade, cMotor.ChaoNormal).normalized * motor.velocidade.magnitude;
+            base.ProcessMovement(motor);
+            cMotor.movementVelocity = Vector3.ProjectOnPlane(motor.movementVelocity, cMotor.floorHit.normal).normalized * motor.movementVelocity.magnitude;
 
-            cMotor.OlharDir = Vector3.ProjectOnPlane(cMotor.Alvo - cMotor.transform.position, cMotor.ChaoNormal).normalized;
 
-            float angulo = (motor.input != Vector3.zero) ? MotorUtil.GetAnguloComSinal(motor.transform.forward, cMotor.OlharDir) : 0;
+            cMotor.LookDir = Vector3.ProjectOnPlane(cMotor.Target - cMotor.transform.position, cMotor.gravity).normalized;
+            float angle = (motor.input != Vector3.zero) ? MotorUtil.GetAnguloComSinal(motor.transform.forward, cMotor.LookDir) : 0;
 
-            motor.velocidadeRotacional.y = MotorUtil.MovUniVar(motor.velocidadeRotacional.y, angulo, velAngMin * Time.fixedDeltaTime,
-                    velAngMax * Time.fixedDeltaTime, acelAngMin * Time.fixedDeltaTime * Time.fixedDeltaTime,
-                    acelAngMax * Time.fixedDeltaTime * Time.fixedDeltaTime);
+            motor.movementAngVelocity.y = MotorUtil.MovUniVar(motor.angularVelocity.y, angle/Time.fixedDeltaTime, velAngMin, velAngMax, acelAngMin, acelAngMax, Time.fixedDeltaTime);
+            //motor.platformAngVelocity.y = motor.platformVelocity != Vector3.zero ? MotorUtil.GetAnguloComSinal(new Vector3(a.x, 0, a.z), new Vector3(motor.platformVelocity.x, 0, motor.platformVelocity.z)) : 0; 
+            //tentar acompanhar a rot da platforma
+
+            //motor.transform.up = -cMotor.gravidadeDirecao.normalized; //tentar por perpendicular ao chao
         }
 
         public override void Construct(Motor motor)
         {
-            base.Construct(motor);
-            motor.character.staminaVar -= staminaVar;
+            motor.character.stamina.varValue -= staminaVar;
+            motor.fallVelocity = Vector3.zero;
         }
 
 
         public override void Deconstruct(Motor motor)
         {
-            base.Deconstruct(motor);
-
-            motor.character.staminaVar += staminaVar;
+            motor.character.stamina.varValue += staminaVar;
         }
 
 
-        public override void Transicao(Motor motor)
+        public override bool CanStay(Motor motor)
         {
-            if (motor.character.stamina < staminaVar && motor.defaultEstado)
-            {
-                motor.DefaultEstado();
-                return;
-            }
-
-            if (!motor.NoChao())
-            {
-                motor.MudarEstado(((CCMotor)motor).queda);
-                return;
-            }
-            else
-            {
-                motor.ProximoEstado();
-                return;
-            }
+            return ((CCMotor)motor).isGrounded && motor.character.stamina.value >= staminaExit;
         }
+
     }
 }

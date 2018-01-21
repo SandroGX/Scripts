@@ -10,15 +10,14 @@ namespace Game.SistemaMotor
         [HideInInspector]
         public CharacterController controller;
 
-        RaycastHit chaoHit;
+        public RaycastHit floorHit;
+        [HideInInspector]
+        public bool isGrounded;
+        public float groundMinDistance = 0.2f;
+        public Vector3 LookDir { get; set; }
+        public Vector3 Target { get; set; }
 
-        public Vector3 ChaoNormal { get; set; }
-        public Vector3 OlharDir { get; set; }
-        public Vector3 Alvo { get; set; }
-
-        public float Gravidade = 9.8f;
-        public Vector3 gravidadeDirecao = -Vector3.up;
-        public MotorEstado queda;
+        public Vector3 gravity = Physics.gravity;
 
         protected override void Awake()
         {
@@ -29,32 +28,18 @@ namespace Game.SistemaMotor
 
         protected override void MotorUpdate()
         {
+            isGrounded = OnGround();
+
             base.MotorUpdate();
 
-            anim.SetFloat("Velocidade", velocidade.magnitude / Time.fixedDeltaTime);
-            anim.SetFloat("Velocidade Angular", velocidadeRotacional.y / Time.fixedDeltaTime);
-
-            controller.Move(velocidade);
-            transform.eulerAngles += velocidadeRotacional;
+            controller.Move(velocity);
+            transform.eulerAngles += angularVelocity;
         }
 
 
-        public override bool NoChao()
+        public override bool OnGround()
         {
-            Physics.Raycast(transform.position, gravidadeDirecao, out chaoHit);
-            
-            ChaoNormal = chaoHit.normal;
-
-            if (chaoHit.distance > 0.2f)
-                return false;
-            else return true;
-           
-        }
-
-
-        public void PorNoChao()
-        {
-            transform.position = chaoHit.point + (-gravidadeDirecao.normalized) * 0.1f;
+            return Physics.Raycast(transform.position, gravity, out floorHit, groundMinDistance);
         }
 
     }

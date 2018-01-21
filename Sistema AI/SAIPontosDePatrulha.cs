@@ -9,6 +9,7 @@ public class SAIPontosDePatrulha : MonoBehaviour
 
     void Awake()
     {
-        pontosDePatrulha.AddRange(patrulha.GetComponentsInChildren<Transform>());
+        if(patrulha != null)
+            pontosDePatrulha.AddRange(patrulha.GetComponentsInChildren<Transform>());
     } 
 }

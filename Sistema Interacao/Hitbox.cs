@@ -20,10 +20,9 @@ namespace Game
             colliders = GetComponents<Collider>();
         }
 
+
         void Start()
         {
-            //hit.danos.multiplicadores.Insert(0, 0);
-            //ativo = false;
             hit.other = this;
         }
 

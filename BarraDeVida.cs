@@ -20,9 +20,7 @@ public class BarraDeVida : MonoBehaviour
         text = GetComponentInChildren<Text>();
         barra = GetComponent<Slider>();
 
-        barra.maxValue = dan.danosMax;
-        barra.value = dan.danosMax - dan.danos;
-        text.text = dan.danosMax - dan.danos + "/" + dan.danosMax;
+        Show();
     }
 
 
@@ -35,14 +33,19 @@ public class BarraDeVida : MonoBehaviour
         }
         else
         {
-            barra.maxValue = dan.danosMax;
-            barra.value = dan.danosMax - dan.danos;
-            text.text = dan.danosMax - dan.danos + "/" + dan.danosMax;
+            Show();
 
             if (atualizarPosicao)
                 transform.position = Camera.main.WorldToScreenPoint(danTransform.position);
         }
+    }
 
+
+    void Show()
+    {
+        barra.maxValue = dan.life.maxValue;
+        barra.value = dan.life.value;
+        text.text = dan.life.value + "/" + dan.life.maxValue;
     }
 
 	

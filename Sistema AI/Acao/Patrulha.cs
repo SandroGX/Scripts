@@ -19,6 +19,8 @@ namespace Game.SistemaAI
 
             pontos = controller.GetComponent<SAIPontosDePatrulha>();
 
+            if (pontos == null) return;
+
             float disMin = float.MaxValue;
 
             for(int i = 0; i < pontos.pontosDePatrulha.Count; i++)
@@ -40,6 +42,8 @@ namespace Game.SistemaAI
 
         public override void OnAction(SAIController controller)
         {
+            if (pontos == null) return;
+
             if (Vector3.Distance(controller.transform.position, pontos.pontosDePatrulha[pontoAtual].position) < distMudar)
             {
                 pontoAtual++;
