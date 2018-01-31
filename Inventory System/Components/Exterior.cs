@@ -7,131 +7,126 @@ using UnityEngine;
 using UnityEditor;
 #endif 
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     [System.Serializable]
     public class Exterior : ItemComponent, IExterior
     {
         public GameObject original, exterior;
+        [SerializeField]
+        Material materialOverride;
 
 
-        public override void AoDuplicar()
+        public override void OnDuplicate()
         {
             exterior = null;
         }
 
 
-
-        public GameObject Criar(Vector3 posicao)
+        public GameObject Create(Vector3 position)
         {
-            GameObject e = Instantiate(original, posicao, Quaternion.identity);
-            C(e);
-            return e;
+            GameObject g = Instantiate(original, position, Quaternion.identity);
+            CreateItem(g);
+            return g;
         }
 
-        public GameObject Criar(Vector3 posicao, Quaternion rotacao)
+        public GameObject Create(Vector3 position, Quaternion rotation)
         {
-            GameObject e = Instantiate(original, posicao, rotacao);
-            C(e);
-            return e;
+            GameObject g = Instantiate(original, position, rotation);
+            CreateItem(g);
+            return g;
         }
 
-        public GameObject Criar(Transform parent)
+        public GameObject Create(Transform parent)
         {
-            GameObject e = Instantiate(original, parent);
-            C(e);
-            return e;
+            GameObject g = Instantiate(original, parent);
+            CreateItem(g);
+            return g;
         }
 
-        public GameObject Criar(Transform parent, bool instantiateInWorldSpace = false)
+        public GameObject Create(Transform parent, bool instantiateInWorldSpace = false)
         {
-            GameObject e = Instantiate(original, parent, instantiateInWorldSpace);
-            C(e);
-            return e;
+            GameObject g = Instantiate(original, parent, instantiateInWorldSpace);
+            CreateItem(g);
+            return g;
         }
 
-        public GameObject Criar(Vector3 posicao, Quaternion rotacao, Transform parent)
+        public GameObject Create(Vector3 position, Quaternion rotation, Transform parent)
         {
-            GameObject e = Instantiate(original, posicao, rotacao, parent);
-            C(e);
-            return e;
+            GameObject g = Instantiate(original, position, rotation, parent);
+            CreateItem(g);
+            return g;
         }
 
 
-
-        void C(GameObject g)
+        void CreateItem(GameObject g)
         {
 
             ItemHolder h = g.AddComponent<ItemHolder>();
 
             Item i;
-
-            if (!item.original)
-                i = Item.Duplicar(item);
+            if (!item.original)i = Item.Duplicate(item);
             else i = item;
 
             i.holder = h;
             h.item = i;
 
-            foreach (ItemComponent c in i.componentes)
+            foreach (ItemComponent c in i.components)
             {
                 IExterior e = c as IExterior;
-
-                if(e != null)
-                    e.OnCriado();
+                if(e != null) e.OnCreate();
             }
 
-            
+            if (materialOverride) g.GetComponent<MeshRenderer>().material = materialOverride;
         }
 
-
-
-        public void OnCriado()
+        public void OnCreate()
         {
             exterior = item.holder.gameObject;
         }
 
 
+        public void Destroy()
+        {
+            Destroy(exterior);
+        }
+
 
 #if UNITY_EDITOR
 
-        public override void GuiParametros()
+        public override void GuiParameters()
         {
-            base.GuiParametros();
+            base.GuiParameters();
             original = (GameObject)EditorGUILayout.ObjectField("Prefab: ", original, typeof(GameObject), false);
+            materialOverride = (Material)EditorGUILayout.ObjectField("Override Material: ", materialOverride, typeof(Material), false);
         }
-
 
 
         public List<string> GetHolderComponentNames<T>() where T : Component
         {
-            List<string> opcoes = new List<string>();
+            if (!original) return null;
+
+            List<string> options = new List<string>();
 
             T t = original.GetComponent<T>() as T;
-
-            if(t)
-                opcoes.Add(t.name);
+            if(t) options.Add(t.name);
 
             T[] d = original.GetComponentsInChildren<T>();
+            if(d.Length != 0) options.AddRange(d.Where(x => !options.Contains(x.name)).Select(x => x.name));
 
-            if(d.Length != 0)
-                opcoes.AddRange(d.Where(x => !opcoes.Contains(x.name)).Select(x => x.name));
-
-            return opcoes;
+            return options;
         }
-
 
 
         public void Opcoes<T>(ref int size, List<string> names) where T : Component
         {
-            List<string> opcoes = GetHolderComponentNames<T>();
+            List<string> options = GetHolderComponentNames<T>();
 
-            if (opcoes.Count != 0)
+            if (options != null && options.Count != 0)
             {
+                EditorGUILayout.LabelField("Max: " + options.Count);
 
-                EditorGUILayout.LabelField("Max: " + opcoes.Count);
-
-                if (size >= opcoes.Count) size = opcoes.Count;
+                if (size >= options.Count) size = options.Count;
 
                 if (size < names.Count)
                 {
@@ -143,22 +138,19 @@ namespace Game.SistemaInventario
                 {
                     int a;
 
-                    if (i >= names.Count)
-                        names.Add("");
+                    if (i >= names.Count) names.Add("");
 
-                    if (opcoes.Contains(names[i]))
-                        a = opcoes.IndexOf(names[i]);
+                    if (options.Contains(names[i])) a = options.IndexOf(names[i]);
                     else a = 0;
 
-                    names[i] = opcoes[EditorGUILayout.Popup(typeof(T).ToString() + i + ": ", a, opcoes.ToArray())];
+                    names[i] = options[EditorGUILayout.Popup(typeof(T).ToString() + i + ": ", a, options.ToArray())];
                 }
             }
             else
             {
-                EditorGUILayout.LabelField("Nao ha " + typeof(T).ToString() + "(s)");
+                EditorGUILayout.LabelField("There isn't " + typeof(T).ToString() + "(s)");
             }
         }
-
 
 
         public static void GetComponentsNames<T>(Exterior exterior, ref int size, List<string> names) where T : Component
@@ -178,7 +170,6 @@ namespace Game.SistemaInventario
                 EditorGUILayout.LabelField("Precisa de um componente do tipo Exterior");
             
         }
-
 
 
         public static void GetComponentsName<T>(Exterior exterior, ref string name) where T : Component

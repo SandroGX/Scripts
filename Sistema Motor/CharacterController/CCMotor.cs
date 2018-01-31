@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     public class CCMotor : Motor
     {
@@ -12,12 +12,8 @@ namespace Game.SistemaMotor
 
         public RaycastHit floorHit;
         [HideInInspector]
-        public bool isGrounded;
         public float groundMinDistance = 0.2f;
-        public Vector3 LookDir { get; set; }
-        public Vector3 Target { get; set; }
 
-        public Vector3 gravity = Physics.gravity;
 
         protected override void Awake()
         {
@@ -28,8 +24,6 @@ namespace Game.SistemaMotor
 
         protected override void MotorUpdate()
         {
-            isGrounded = OnGround();
-
             base.MotorUpdate();
 
             controller.Move(velocity);
@@ -37,9 +31,47 @@ namespace Game.SistemaMotor
         }
 
 
-        public override bool OnGround()
+        public override void OnGround()
         {
-            return Physics.Raycast(transform.position, gravity, out floorHit, groundMinDistance);
+            float radius = controller.radius;
+
+            if (Physics.Raycast(transform.position, gravity, out floorHit, groundMinDistance) ||
+               Physics.Raycast(transform.position + (transform.up + -transform.forward) * radius, gravity, out floorHit, groundMinDistance + radius) ||
+               Physics.Raycast(transform.position + (transform.up + transform.forward) * radius, gravity, out floorHit, groundMinDistance + radius) ||
+               Physics.Raycast(transform.position + (transform.up + transform.right) * radius, gravity, out floorHit, groundMinDistance + radius) ||
+               Physics.Raycast(transform.position + (transform.up + -transform.right) * radius, gravity, out floorHit, groundMinDistance + radius))
+            {
+                isGrounded = true;
+                surfaceNormal = floorHit.normal;
+                if (floorHit.rigidbody)
+                {
+                    rawPlatformVelocity = floorHit.rigidbody.GetPointVelocity(floorHit.point) * Time.fixedDeltaTime;
+                    rawPlatformAngVelocity = floorHit.rigidbody.angularVelocity * Mathf.Rad2Deg * Time.fixedDeltaTime;
+                }
+                else rawPlatformVelocity = rawPlatformAngVelocity = Vector3.zero;
+                if (floorHit.collider.material)
+                {
+                    surfaceStaticFriction = floorHit.collider.material.staticFriction;
+                    surfaceDynamicFriction = floorHit.collider.material.dynamicFriction;
+                }
+                else surfaceStaticFriction = surfaceDynamicFriction = 1;
+            }
+            else base.OnGround();
+        }
+
+        void OnControllerColliderHit(ControllerColliderHit hit)
+        {
+            MotorUtil.KillVelocities(this, hit.normal);
+        }
+
+
+        protected override void SetLookDir()
+        {
+            lookDir = (lookAtTarget ? target - transform.position : (input != Vector3.zero ? input : transform.forward)).normalized;
+
+            if (surfaceNormal != Vector3.zero) lookDir = Vector3.ProjectOnPlane(lookDir, gravity).normalized;
+
+            Debug.DrawRay(transform.position, lookDir);
         }
 
     }

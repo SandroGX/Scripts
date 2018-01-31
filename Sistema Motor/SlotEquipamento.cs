@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Game.SistemaInventario;
+using Game.InventorySystem;
 using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
@@ -25,17 +25,17 @@ public class SlotEquipamento : SlotMotor, IExterior
 
             if (aPorEx)
             {
-                aPorEx.Criar(parent);
+                aPorEx.Create(parent);
 
             }
         }
     }
 
-    public override void OnCriado()
+    public override void OnCreate()
     {
         parent = item.holder.GetHolderComponent<Transform>(parentName);
 
-        base.OnCriado();
+        base.OnCreate();
 
     }
 
@@ -44,9 +44,9 @@ public class SlotEquipamento : SlotMotor, IExterior
 
     Exterior exterior;
 
-    public override void GuiParametros()
+    public override void GuiParameters()
     {
-        base.GuiParametros();
+        base.GuiParameters();
 
         if (exterior)
             Exterior.GetComponentsName<Transform>(exterior, ref parentName);

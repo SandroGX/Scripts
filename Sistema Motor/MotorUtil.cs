@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     public static class MotorUtil
     {
@@ -18,8 +18,6 @@ namespace Game.SistemaMotor
             return velAtual + acelDes;
         }
 
-
-
         public static float MovUniVar(float velAtual, float velDesejada, float velMin, float velMax, float acelMin, float acelMax)
         {
             velDesejada = Mathf.Clamp(Mathf.Abs(velDesejada), velMin, velMax) * Mathf.Sign(velDesejada);
@@ -31,22 +29,18 @@ namespace Game.SistemaMotor
             return velAtual + acelDes;
         }
 
-
-
         public static Vector3 MovUniVar(Vector3 velAtual, Vector3 velDesejada, float velMin, float velMax, float acelMin, float acelMax, float time)
         {
             return MovUniVar(velAtual, velDesejada * time, velMin * time, velMax * time, acelMin * time * time, acelMax * time * time);
         }
-
-
 
         public static float MovUniVar(float velAtual, float velDesejada, float velMin, float velMax, float acelMin, float acelMax, float time)
         {
             return MovUniVar(velAtual, velDesejada * time, velMin * time, velMax * time, acelMin * time * time, acelMax * time * time);
         }
 
-
-        public static float GetAnguloComSinal(Vector3 origem, Vector3 destino)
+   
+        public static float GetAngleWithSignal(Vector3 origem, Vector3 destino)
         {
             Vector3 perp = Vector3.Cross(destino, origem).normalized;
 
@@ -66,6 +60,19 @@ namespace Game.SistemaMotor
                 motor.navAgent.angularSpeed = mB.velAngMax;
                 motor.navAgent.acceleration = mB.acelMax;
             }
+        }
+
+
+        public static Vector3 KillVector(Vector3 toKill, Vector3 killer)
+        {
+            return toKill - Vector3.Project(toKill, killer);
+        }
+
+        public static void KillVelocities(Motor motor, Vector3 killer)
+        {
+            motor.movementVelocity = KillVector(motor.movementVelocity, killer);
+            motor.platformVelocity = KillVector(motor.platformVelocity, killer);
+            motor.fallVelocity = KillVector(motor.fallVelocity, killer);
         }
     }
 }

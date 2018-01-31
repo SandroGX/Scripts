@@ -4,11 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     public class ItemEditor : EditorWindow
     {
-        string novoCompTipo = Item.todosComps[0];
+        string novoCompTipo = Item.allComponents[0];
 
         Item item;
 
@@ -32,7 +32,7 @@ namespace Game.SistemaInventario
 
                 GUILayout.BeginHorizontal();
 
-                novoCompTipo = Item.todosComps[EditorGUILayout.Popup(Item.todosComps.IndexOf(novoCompTipo), Item.todosComps.ToArray())];
+                novoCompTipo = Item.allComponents[EditorGUILayout.Popup(Item.allComponents.IndexOf(novoCompTipo), Item.allComponents.ToArray())];
 
                 if(GUILayout.Button("Criar componente"))
                 {
@@ -40,7 +40,7 @@ namespace Game.SistemaInventario
 
                     if (c)
                     {
-                        item.componentes.Add(c);
+                        item.components.Add(c);
                         c.item = item;
                         c.name = "Novo " + c.GetType().ToString(); 
                         AssetDatabase.AddObjectToAsset(c, item);
@@ -53,7 +53,7 @@ namespace Game.SistemaInventario
                 {
                     EditorUtility.SetDirty(item);
 
-                    foreach (ItemComponent c in item.componentes)
+                    foreach (ItemComponent c in item.components)
                         EditorUtility.SetDirty(c);
                 }
             }

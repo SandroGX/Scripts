@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     public class MotorAtivar : StateMachineBehaviour
     {

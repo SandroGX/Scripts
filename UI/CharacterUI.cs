@@ -5,10 +5,12 @@ using UnityEngine.UI;
 
 public class CharacterUI : MonoBehaviour
 {
-    public Image barraDeDanos;
-    public Text textoDanos;
-    public Image barraDeStamina;
-    public Text textoStamina;
+    public Image lifeBar;
+    public Text lifeText;
+    public Image staminaBar;
+    public Text staminaText;
+
+    public Color staminaColor, staminaDepletedColor;
 
     public Character character;
 
@@ -16,16 +18,24 @@ public class CharacterUI : MonoBehaviour
     {
         if (!character) return;
 
-        Barra(barraDeDanos, textoDanos, "Life", character.danificavel.danificavel.life.value, character.danificavel.danificavel.life.maxValue, false);
-        Barra(barraDeStamina, textoStamina, "Stamina", character.stamina.value, character.stamina.maxValue, false);
+        Bar(lifeBar, lifeText, "Life", character.damageable.damageable.life.value, character.damageable.damageable.life.maxValue, false);
+        Bar(staminaBar, staminaText, "Stamina", character.stamina.value, character.stamina.maxValue, false);
+
+        SetStaminaColor();
     }
 
 
-    void Barra(Image barraFill, Text texto, string nome, float valor, float valorMax, bool inverter)
+    void Bar(Image barFill, Text text, string name, float value, float maxValue, bool invert)
     {
-        float v = valor / valorMax;
-        barraFill.fillAmount = inverter ? 1 - v : v;
+        float v = value / maxValue;
+        barFill.fillAmount = invert ? 1 - v : v;
 
-        texto.text = nome + ": " + (inverter ? valorMax - valor : valor) + "/" + valorMax;
+        text.text = name + ": " + (int)(invert ? maxValue - value : value) + "/" + maxValue;
+    }
+
+
+    void SetStaminaColor()
+    {
+        staminaBar.color = character.tired ? staminaDepletedColor : staminaColor;
     }
 }

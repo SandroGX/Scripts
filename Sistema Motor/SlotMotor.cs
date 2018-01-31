@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Game.SistemaMotor;
-using Game.SistemaInventario;
+using Game.MotorSystem;
+using Game.InventorySystem;
 
 [System.Serializable]
 public class SlotMotor : Slot, IExterior
@@ -9,12 +9,12 @@ public class SlotMotor : Slot, IExterior
 
     protected Motor motor;
 
-    public override void AoDuplicar()
+    public override void OnDuplicate()
     {
-        base.AoDuplicar();
+        base.OnDuplicate();
     }
 
-    protected override void AoPor(Item aPor)
+    protected override void OnInsert(Item aPor)
     {
         AoPorExterior(aPor);
     }
@@ -24,7 +24,7 @@ public class SlotMotor : Slot, IExterior
     {
         if (aPor && motor)
         {
-            foreach (ItemComponent c in aPor.componentes)
+            foreach (ItemComponent c in aPor.components)
             {
                 IAtivavel a = c as IAtivavel;
 
@@ -53,11 +53,11 @@ public class SlotMotor : Slot, IExterior
 
 
 
-    public virtual void OnCriado()
+    public virtual void OnCreate()
     {
         motor = item.holder.GetComponent<Motor>();
 
-        AoPorExterior(guardado);
+        AoPorExterior(inserted);
 
     }
 

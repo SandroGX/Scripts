@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     [AddComponentMenu("Inventario/Item Holder")]
     public class ItemHolder : MonoBehaviour
@@ -14,8 +14,7 @@ namespace Game.SistemaInventario
         public T GetHolderComponent<T>(string componentName) where T : Component
         {
             T t;
-            if (name.Contains(componentName))
-                t = GetComponent<T>();
+            if (name.Contains(componentName)) t = GetComponent<T>();
             else
             {
                 T[] d = GetComponentsInChildren<T>();
@@ -26,7 +25,6 @@ namespace Game.SistemaInventario
         }
 
 
-
         public List<T> GetHolderComponents<T>(string[] names) where T : Component
         {
             List<T> a = new List<T>();
@@ -34,14 +32,15 @@ namespace Game.SistemaInventario
 
             foreach (string s in names)
             {
-                if (name.Contains(s))
-                    a.Add(GetComponent<T>());
-                else
-                    a.Add(d.First(x => x.name == s));
-                
+                if (name.Contains(s)) a.Add(GetComponent<T>());
+                else a.Add(d.First(x => x.name == s));
             }
-
             return a;
+        }
+
+        public void Destroy()
+        {
+            Destroy(gameObject);
         }
 
     }

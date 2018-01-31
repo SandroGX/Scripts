@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     [AddComponentMenu("Inventario/Item Instatiator")]
     public class ItemInstatiator : MonoBehaviour
@@ -11,12 +11,12 @@ namespace Game.SistemaInventario
 
         void Awake()
         {
-            Criar(original);
+            Create(original);
         }
 
-        void Criar(Item item)
+        void Create(Item item)
         {
-            item.GetComponent<Exterior>().Criar(transform.position, transform.rotation);
+            item.GetComponent<Exterior>().Create(transform.position, transform.rotation);
         }
     }
 }

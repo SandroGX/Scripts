@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Game.SistemaMotor;
-using Game.SistemaInventario;
+using Game.MotorSystem;
+using Game.InventorySystem;
 
 namespace Game.SistemaAI
 {
@@ -36,7 +36,7 @@ namespace Game.SistemaAI
             navAgent.updatePosition = false;
             navAgent.updateRotation = false;
 
-            inimigo = GameObject.FindGameObjectWithTag("Player").GetComponent<ItemHolder>().item.GetComponent<Character>();
+            inimigo = GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();
 
             ai.root.OnActionEnter(this);
         }
@@ -44,7 +44,16 @@ namespace Game.SistemaAI
 
         void Update()
         {
-            ((CCMotor)motor).Target = inimigo ? inimigo.item.holder.transform.position : transform.forward;
+            if (inimigo)
+            {
+                motor.lookAtTarget = true;
+                motor.target = inimigo.item.holder.transform.position;
+            }
+            else
+            {
+                motor.lookAtTarget = false;
+                inimigo = GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();
+            }
             Vector3 input = navAgent.desiredVelocity / navAgent.speed;
             motor.input = (input.magnitude > 1) ? input.normalized : input;
 

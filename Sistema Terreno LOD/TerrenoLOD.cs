@@ -47,7 +47,7 @@ namespace Game.SistemaTerrenoLOD
                     paredeD = transform.GetChild(7).gameObject;
                 }
             }
-            else Debug.LogError("A");
+            else Debug.LogError("You need 2 mesh for the terrain LOD or 8 for the terrain and walls");
 
             if (hi.GetComponent<MeshCollider>() == null)
                 hi.AddComponent<MeshCollider>();

@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Game.SistemaInventario;
+using Game.InventorySystem;
 
 public class PlayerUI : MonoBehaviour
 {
 
     public CharacterUI playerCharacterUI;
-    public GameObject barra;
+    public GameObject bar;
 
-    List<CharacterUI> inimigosUI = new List<CharacterUI>();
+    List<CharacterUI> enemiesUI = new List<CharacterUI>();
 
 	void Awake ()
     {
@@ -26,25 +26,25 @@ public class PlayerUI : MonoBehaviour
     }
 
 
-    public void IniciarInimigoBarra(Character c, Transform lugar)
+    public void CreateEnemyBar(Character c, Transform transfrom)
     {
-        CharacterUI u = Instantiate(barra, Camera.main.WorldToScreenPoint(lugar.position), Quaternion.Euler(Vector3.zero), transform).GetComponent<CharacterUI>();
+        CharacterUI u = Instantiate(bar, Camera.main.WorldToScreenPoint(transfrom.position), Quaternion.Euler(Vector3.zero), transform).GetComponent<CharacterUI>();
         u.character = c;
         UIScreen s = u.gameObject.AddComponent<UIScreen>();
-        s.i = lugar;
+        s.i = transfrom;
 
-        inimigosUI.Add(u);
+        enemiesUI.Add(u);
         
     }
 
 
     public void AcabarInimigoBarra(Character  c)
     {
-        foreach(CharacterUI u in inimigosUI)
+        foreach(CharacterUI u in enemiesUI)
         {
             if(u.character == c)
             {
-                inimigosUI.Remove(u);
+                enemiesUI.Remove(u);
                 Destroy(u.gameObject);
                 break;
             }

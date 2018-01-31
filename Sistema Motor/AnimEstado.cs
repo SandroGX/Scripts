@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Anim", menuName = "Motor/Anim", order = 0)]
     public class AnimEstado : MotorEstado
@@ -14,7 +14,7 @@ namespace Game.SistemaMotor
 
         public override void OnAnimationEnd(Motor motor)
         {
-            motor.MudarEstado(motor.nextState);
+            motor.ChangeState(motor.nextState);
         }
 
 
@@ -44,7 +44,7 @@ namespace Game.SistemaMotor
             return movimento&&movimento.CanStay(motor) || !movimento;
         }
 
-        public override MotorEstado Transition(Motor motor)
+        public override MotorEstado GetNextState(Motor motor)
         {
             return null;
         }

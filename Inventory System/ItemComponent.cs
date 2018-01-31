@@ -5,37 +5,37 @@ using UnityEngine;
 using UnityEditor;
 #endif 
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     public abstract class ItemComponent : ScriptableObject
     {
         public Item item;
 
-        public virtual void AoDuplicar()
+        public virtual void OnDuplicate()
         {
 
         }
 
 #if UNITY_EDITOR
 
-        bool mostrar;
+        bool show;
 
         public void OnGui()
         {
-            mostrar = EditorGUILayout.Foldout(mostrar, this.ToString());
+            show = EditorGUILayout.Foldout(show, this.ToString());
 
-            if (mostrar)
+            if (show)
             {
                 GUILayout.BeginHorizontal();
 
                 GUILayout.Space(20);
 
                 GUILayout.BeginVertical();
-                GuiParametros();
 
-                if (GUILayout.Button("Eliminar"))
+                GuiParameters();
+                if (GUILayout.Button("Eliminate"))
                 {
-                    item.componentes.Remove(this);
+                    item.components.Remove(this);
                     DestroyImmediate(this, true);
                 }
 
@@ -45,9 +45,9 @@ namespace Game.SistemaInventario
             }
         }
 
-        public virtual void GuiParametros()
+        public virtual void GuiParameters()
         {
-            name = EditorGUILayout.TextField("Nome: ", name);
+            name = EditorGUILayout.TextField("Name: ", name);
         }
 
 #endif 

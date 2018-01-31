@@ -5,41 +5,41 @@ using UnityEngine;
 using UnityEditor;
 #endif
 using Game;
-using Game.SistemaInventario;
+using Game.InventorySystem;
 
-public class DanificavelItem : ItemComponent, IExterior
+public class DamageableItem : ItemComponent, IExterior
 {
-    public Danificavel danificavel;
+    public Damageable damageable;
 
     [SerializeField]
     List<string> hitboxesName;
     public List<Hitbox> hitboxes = new List<Hitbox>();
 
 
-    public override void AoDuplicar()
+    public override void OnDuplicate()
     {
-        danificavel = new Danificavel(danificavel);
+        damageable = new Damageable(damageable);
         hitboxes.Clear();
     }
 
 
 
-    public void OnCriado()
+    public void OnCreate()
     {
 
         hitboxes = item.holder.GetHolderComponents<Hitbox>(hitboxesName.ToArray());
 
-        foreach (Hitbox h in hitboxes) h.OnHitEnter += ReceberDanos;
+        foreach (Hitbox h in hitboxes) h.OnHitEnter += ReceiveDamage;
         
-        item.holder.StartCoroutine(danificavel.life.Variation());
+        item.holder.StartCoroutine(damageable.life.Variation());
 
     }
 
 
 
-    public void ReceberDanos(HitInfo info)
+    public void ReceiveDamage(HitInfo info)
     {
-        danificavel.ReceiveDamage(info.danos);
+        damageable.ReceiveDamage(info.damage);
     }
 
 
@@ -47,7 +47,7 @@ public class DanificavelItem : ItemComponent, IExterior
     void OnDestroy()
     {
         foreach (Hitbox h in hitboxes)
-            h.OnHitEnter -= ReceberDanos;
+            h.OnHitEnter -= ReceiveDamage;
 
     }
 
@@ -57,11 +57,12 @@ public class DanificavelItem : ItemComponent, IExterior
     Exterior exterior;
     public int size = 1;
 
-    public override void GuiParametros()
+    public override void GuiParameters()
     {
-        base.GuiParametros();
+        base.GuiParameters();
 
-        if(danificavel) danificavel.Gui();
+        if (damageable) damageable.Gui();
+        else damageable = new Damageable();
 
         if (exterior) Exterior.GetComponentsNames<Hitbox>(exterior, ref size, hitboxesName);
         else exterior = item.GetComponent<Exterior>();

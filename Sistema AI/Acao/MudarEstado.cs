@@ -4,7 +4,7 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using Game.SistemaMotor;
+using Game.MotorSystem;
 
 namespace Game.SistemaAI
 {

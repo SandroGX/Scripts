@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     public interface IExterior
     {
-        void OnCriado();
-        //void OnDestruido();
+        void OnCreate();
+        //void OnDestroyed();
     }
 }

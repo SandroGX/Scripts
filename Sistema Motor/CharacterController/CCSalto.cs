@@ -2,31 +2,27 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Salto", menuName = "Motor/CharacterController/Salto", order = 2)]
-    public class CCSalto : MotorEstado
+    public class CCSalto : CCAccelaration
     {
 
         public float saltoAltura = 4;
-        public float aceleracaoXZ = 2;
         public int staminaVarInst;
        
         public override void ProcessMovement(Motor motor)
         {
-            CCMotor cMotor = (CCMotor)motor;
+            float saltoVelocidade = Mathf.Sqrt(-2 * -motor.gravity.magnitude * saltoAltura);
+            motor.fallVelocity = -motor.gravity.normalized * saltoVelocidade * Time.fixedDeltaTime;
 
-            float saltoVelocidade = Mathf.Sqrt(-2 * -cMotor.gravity.magnitude * saltoAltura);
-
-            motor.fallVelocity = -cMotor.gravity.normalized * saltoVelocidade * Time.fixedDeltaTime;
-
-            motor.movementVelocity += Vector3.ProjectOnPlane(cMotor.input, cMotor.floorHit.normal) * aceleracaoXZ * Time.fixedDeltaTime;
-               
+            base.ProcessMovement(motor);  
         }
 
 
         public override void Construct(Motor motor)
         {
+            base.Construct(motor);
             motor.movementVelocity += motor.platformVelocity;
             motor.platformVelocity = motor.fallVelocity = motor.movementAngVelocity = motor.platformAngVelocity = Vector3.zero; 
             motor.character.stamina.Add(-staminaVarInst);
@@ -35,7 +31,7 @@ namespace Game.SistemaMotor
 
         public override bool CanStay(Motor motor)
         {
-            return ((CCMotor)motor).isGrounded && (motor.character.stamina.value >= staminaVarInst || motor.currentState == this); //&& canJump
+            return motor.isGrounded && !motor.character.tired && base.CanStay(motor); //&& canJump
         }
     }
 }

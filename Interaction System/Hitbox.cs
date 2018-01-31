@@ -11,9 +11,9 @@ namespace Game
 
         public HitInfo hit = new HitInfo();
 
-        public delegate void A(HitInfo hit);
-        public event A OnHitEnter;
-        public event A OnHitExit;
+        public delegate void Hit(HitInfo hit);
+        public event Hit OnHitEnter;
+        public event Hit OnHitExit;
 
         void Awake()
         {
@@ -27,42 +27,32 @@ namespace Game
         }
 
 
-
         void OnTriggerEnter(Collider other)
         {
-
             Hitbox h = other.GetComponent<Hitbox>();
-
             if (h && h.OnHitEnter != null)
             {
                 hit.me = h;
                 h.OnHitEnter(hit);
             }
-
         }
-
 
 
         void OnTriggerExit(Collider other)
         {
-            
             Hitbox h = other.GetComponent<Hitbox>();
-
             if (h && h.OnHitExit != null)
             {
                 hit.me = h;
                 h.OnHitExit(hit);
             }
-            
         }
 
 
 
-        public void Ativar(bool ativo)
+        public void ActivateHitBox(bool active)
         {
-            foreach(Collider c in colliders)
-                c.enabled = ativo; 
-            
+            foreach(Collider c in colliders) c.enabled = active; 
         }
     }
 
@@ -71,7 +61,7 @@ namespace Game
     {
         public Hitbox me;
         public Hitbox other;
-        public Danos danos;
+        public Damage damage;
 
     }
 

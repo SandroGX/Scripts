@@ -27,20 +27,20 @@ public class Statistic
 
     public Statistic(Statistic original)
     {
-        this.value = original.value;
-        this.minValue = original.minValue;
-        this.maxValue = original.maxValue;
-        this.varValue = original.varValue;
+        value = original.value;
+        minValue = original.minValue;
+        maxValue = original.maxValue;
+        varValue = original.varValue;
         Min = null;
         Max = null;
     }
 
     public Statistic()
     {
-        this.value = 0;
-        this.minValue = 0;
-        this.maxValue = 0;
-        this.varValue = 0;
+        value = 0;
+        minValue = 0;
+        maxValue = 0;
+        varValue = 0;
         Min = null;
         Max = null;
     }
@@ -60,8 +60,8 @@ public class Statistic
     void Limits()
     {
         value = Mathf.Clamp(value, minValue, maxValue);
-        if (value == minValue && Min != null) Min();
-        if (value == maxValue && Max != null) Max();
+        if (value == minValue && Min != null) { Min(); }
+        if (value == maxValue && Max != null) {Max(); }
     }
 
 

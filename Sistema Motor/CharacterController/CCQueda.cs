@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Queda", menuName = "Motor/CharacterController/Queda", order = 1)]
     public class CCQueda : MovimentoBasico
@@ -12,12 +12,9 @@ namespace Game.SistemaMotor
 
         public override void ProcessMovement(Motor motor)
         {
-            CCMotor cMotor = (CCMotor)motor;
-
             base.ProcessMovement(motor);
 
-            motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, cMotor.gravity.normalized * velocidadeTerminal, 1, velocidadeTerminal, 0, cMotor.gravity.magnitude, Time.fixedDeltaTime);
-
+            motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, motor.gravity.normalized * velocidadeTerminal, 1, velocidadeTerminal, 0, motor.gravity.magnitude, Time.fixedDeltaTime);
         }
 
         public override void Construct(Motor motor)
@@ -31,7 +28,7 @@ namespace Game.SistemaMotor
 
         public override bool CanStay(Motor motor)
         {
-            return !((CCMotor)motor).isGrounded;
+            return !motor.isGrounded;
         }
         
     }

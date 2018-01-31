@@ -6,34 +6,34 @@ using UnityEditor;
 #endif
 
 [System.Serializable]
-public class Danificavel
+public class Damageable
 {
     public Statistic life = new Statistic();
 
-    public static implicit operator bool(Danificavel danificavel)
+    public static implicit operator bool(Damageable damageable)
     {
-        if (danificavel != null) return true;
+        if (damageable != null) return true;
         else return false;
     }
 
 
-    public void ReceiveDamage(Danos damage)
+    public void ReceiveDamage(Damage damage)
     {
-        life.Add(-damage.danos);
+        life.Add(-damage.damage);
     }
 
 
-    public Danificavel(Statistic life)
+    public Damageable(Statistic life)
     {
         this.life = new Statistic(life);
     }
 
-    public Danificavel(Danificavel original)
+    public Damageable(Damageable original)
     {
-        this.life = new Statistic(original.life);
+        life = new Statistic(original.life);
     }
 
-    public Danificavel()
+    public Damageable()
     {
         life = new Statistic();
     }

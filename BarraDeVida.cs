@@ -8,7 +8,7 @@ public class BarraDeVida : MonoBehaviour
     Text text;
     Slider barra;
     [HideInInspector]
-    public Danificavel dan;
+    public Damageable dan;
     [HideInInspector]
     public Transform danTransform;
 

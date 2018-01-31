@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.SistemaMotor;
+using Game.MotorSystem;
 
 public class Player : MonoBehaviour
 {
@@ -56,7 +56,7 @@ public class Player : MonoBehaviour
         Vector3 i = Input();
 
         motor.input = i;
-        ((CCMotor)motor).Target = transform.position + i;
+        motor.target = transform.position + i;
 
         time += Time.deltaTime;
         foreach (Control c in controls) c.Action(motor);

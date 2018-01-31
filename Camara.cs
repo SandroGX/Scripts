@@ -29,6 +29,12 @@ public class Camara : MonoBehaviour
     }
 
 
+    private void OnApplicationFocus(bool focus)
+    {
+        if(focus) Cursor.lockState = CursorLockMode.Locked;
+    }
+
+
     public void OlharSeguirAlvo(Vector3 alvo)
     {
         rotY += Input.GetAxis("Mouse X") * camaraVelocidade;

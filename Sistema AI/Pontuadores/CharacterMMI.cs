@@ -18,8 +18,8 @@ namespace Game.SistemaAI
         {
             switch (tipo)
             {
-                case Tipo.danos: aAvaliar = ai.character.danificavel.danificavel.life.value; break;
-                case Tipo.danos_Percentagem : aAvaliar = (ai.character.danificavel.danificavel.life.value / ai.character.danificavel.danificavel.life.maxValue) * 100; break;
+                case Tipo.danos: aAvaliar = ai.character.damageable.damageable.life.value; break;
+                case Tipo.danos_Percentagem : aAvaliar = (ai.character.damageable.damageable.life.value / ai.character.damageable.damageable.life.maxValue) * 100; break;
                 case Tipo.stamina: aAvaliar = ai.character.stamina.value; break;
                 case Tipo.stamina_Percentagem: aAvaliar = (ai.character.stamina.value / ai.character.stamina.maxValue) * 100; break;
             }

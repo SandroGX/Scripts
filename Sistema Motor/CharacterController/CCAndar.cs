@@ -3,55 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Andar", menuName = "Motor/CharacterController/Andar", order = 0)]
     public class CCAndar : MovimentoBasico
     {
+        public float maxFallSpeed = 35;
+        public float staticFriction = 1, dynamicFriction = 1;
         public int staminaVar;
-        public int staminaExit;
+        public bool allowTired;
 
 
         public override void ProcessMovement(Motor motor)
         {
-            CCMotor cMotor = (CCMotor)motor;
+            Vector3 normal = motor.surfaceNormal * motor.gravity.magnitude * Mathf.Cos(Vector3.Angle(motor.gravity, -motor.surfaceNormal) * Mathf.Deg2Rad);
+            Vector3 grav = normal + motor.gravity;
+            float friction = normal.magnitude * (motor.velocity == Vector3.zero ? staticFriction * motor.surfaceStaticFriction : dynamicFriction * motor.surfaceDynamicFriction);
+     
+            float acel = grav.magnitude - friction;
+            Vector3 v = acel > 0 ? grav.normalized * maxFallSpeed : Vector3.zero;
+            motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, v, 0, maxFallSpeed, 0, Mathf.Abs(acel), Time.fixedDeltaTime);
 
-            //Vector3 gravity = Vector3.Cross(cMotor.gravity, cMotor.floorHit.normal).normalized * cMotor.gravity.magnitude * Mathf.Sin(Vector3.Angle(cMotor.gravity, cMotor.floorHit.normal));
-            //motor.fallVelocity = MotorUtil.MovUniVar(motor.fallVelocity, )
+            motor.platformVelocity = MotorUtil.MovUniVar(motor.platformVelocity, motor.rawPlatformVelocity, 0, Mathf.Infinity, 0, friction * Time.fixedDeltaTime * Time.fixedDeltaTime);
 
-            Vector3 a = motor.platformVelocity;
-            motor.platformVelocity = cMotor.floorHit.rigidbody ? cMotor.floorHit.rigidbody.GetPointVelocity(cMotor.floorHit.point) * Time.fixedDeltaTime : Vector3.zero;
-
+            motor.InputOnSurface();
             base.ProcessMovement(motor);
-            cMotor.movementVelocity = Vector3.ProjectOnPlane(motor.movementVelocity, cMotor.floorHit.normal).normalized * motor.movementVelocity.magnitude;
 
 
-            cMotor.LookDir = Vector3.ProjectOnPlane(cMotor.Target - cMotor.transform.position, cMotor.gravity).normalized;
-            float angle = (motor.input != Vector3.zero) ? MotorUtil.GetAnguloComSinal(motor.transform.forward, cMotor.LookDir) : 0;
-
+            //Vector3 lookDir = Vector3.ProjectOnPlane(motor.target - motor.transform.position, motor.gravity).normalized;
+            float angle = (motor.input != Vector3.zero) ? MotorUtil.GetAngleWithSignal(motor.transform.forward, motor.lookDir) : 0;
             motor.movementAngVelocity.y = MotorUtil.MovUniVar(motor.angularVelocity.y, angle/Time.fixedDeltaTime, velAngMin, velAngMax, acelAngMin, acelAngMax, Time.fixedDeltaTime);
-            //motor.platformAngVelocity.y = motor.platformVelocity != Vector3.zero ? MotorUtil.GetAnguloComSinal(new Vector3(a.x, 0, a.z), new Vector3(motor.platformVelocity.x, 0, motor.platformVelocity.z)) : 0; 
-            //tentar acompanhar a rot da platforma
+
+            motor.platformAngVelocity = motor.rawPlatformAngVelocity;
+
 
             //motor.transform.up = -cMotor.gravidadeDirecao.normalized; //tentar por perpendicular ao chao
         }
 
         public override void Construct(Motor motor)
         {
+            base.Construct(motor);
             motor.character.stamina.varValue -= staminaVar;
-            motor.fallVelocity = Vector3.zero;
+            motor.fallVelocity *= Mathf.Cos(Vector3.Angle(motor.gravity, -motor.surfaceNormal) * Mathf.Deg2Rad); 
         }
 
 
         public override void Deconstruct(Motor motor)
         {
+            base.Deconstruct(motor);
             motor.character.stamina.varValue += staminaVar;
         }
 
 
         public override bool CanStay(Motor motor)
         {
-            return ((CCMotor)motor).isGrounded && motor.character.stamina.value >= staminaExit;
+            return ((CCMotor)motor).isGrounded && (!motor.character.tired || allowTired);
         }
 
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Game.SistemaInventario
+namespace Game.InventorySystem
 {
     public class TesteInv : ItemComponent, IExterior
     {
@@ -14,14 +14,10 @@ namespace Game.SistemaInventario
         string hitboxName;
         Hitbox hitbox;
 
-        public void OnCriado()
+        public void OnCreate()
         {
-
             hitbox = item.holder.GetHolderComponent<Hitbox>(hitboxName);
-
-            if(hitbox)
-                hitbox.OnHitEnter += Teste;
-            
+            if(hitbox) hitbox.OnHitEnter += Teste;
         }
 
         void Teste(HitInfo h)
@@ -34,9 +30,9 @@ namespace Game.SistemaInventario
 
         Exterior exterior;
 
-        public override void GuiParametros()
+        public override void GuiParameters()
         {
-            base.GuiParametros();
+            base.GuiParameters();
 
             
             if (exterior)
@@ -53,13 +49,13 @@ namespace Game.SistemaInventario
 
                     hitboxName = opcoes[EditorGUILayout.Popup("HitBox: ", a, opcoes.ToArray())];
                 }
-                else EditorGUILayout.LabelField("Nao ha hitboxes");
+                else EditorGUILayout.LabelField("There aren't hitboxes");
 
             }
             else
             {
                 exterior = item.GetComponent<Exterior>();
-                EditorGUILayout.LabelField("Precisa de um componente do tipo Exterior");
+                EditorGUILayout.LabelField("You need a component of type Exterior");
             }
 
         }

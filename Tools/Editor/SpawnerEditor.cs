@@ -15,9 +15,9 @@ public class SpawnerEditor : Editor
         Spawner d = (Spawner)target;
 
         if (GUILayout.Button("Spawn"))
-            d.Gerar();
+            d.Spawn();
 
         if (GUILayout.Button("Retirar"))
-            d.LimparFilhos();
+            d.CleanChildren();
     }
 }

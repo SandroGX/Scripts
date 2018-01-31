@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.SistemaMotor
+namespace Game.MotorSystem
 {
     [System.Serializable]
     [CreateAssetMenu(fileName = "Movimento Basico", menuName = "Motor/Movimento Basico", order = 0)]
@@ -20,7 +20,6 @@ namespace Game.SistemaMotor
         public float acelAngMax;
 
         public bool ignorarVelAnterior;
-        public AnimEstado anim;
 
         
         public override void ProcessMovement(Motor motor)
@@ -30,10 +29,9 @@ namespace Game.SistemaMotor
             float velMaxAt = (!ignorarVelAnterior && vel > velMax) ? motor.movementVelocity.magnitude : velMax;
 
             Vector3 velDes;
-
             if (motor.input != Vector3.zero) velDes = motor.input * velMaxAt;
             else if(motor.movementVelocity != Vector3.zero) velDes = motor.movementVelocity.normalized * velMinAt;
-            else velDes = motor.transform.forward * velMinAt;
+            else velDes = motor.lookDir * velMinAt;
 
             motor.velocity = motor.movementVelocity = MotorUtil.MovUniVar(motor.movementVelocity, velDes, velMinAt, velMaxAt, acelMin, acelMax, Time.fixedDeltaTime);
 
@@ -48,9 +46,7 @@ namespace Game.SistemaMotor
         }
 
 
-        public override void OnAnimationEnd(Motor motor)
-        {
-            if(anim) anim.OnAnimationEnd(motor);
-        }
+        public override bool CanStay(Motor motor) { return true; }
+
     }
 }

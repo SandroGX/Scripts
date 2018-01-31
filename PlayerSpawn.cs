@@ -1,23 +1,26 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.InventorySystem;
 
 public class PlayerSpawn : MonoBehaviour {
 
-    GameObject player;
-    public GameObject playerPrefab;
+    public Item playerPrefab;
 
 
 	void Start ()
     {
-        player = GameObject.FindGameObjectWithTag("Player");
-
+        Spawn();
     }
 	
 	
 	void Update ()
     {
-        if (player == null)
-            player = Instantiate(playerPrefab, transform.position, transform.rotation);
-	}
+        Spawn();
+    }
+
+    void Spawn()
+    {
+        if (GameManager.PLAYER == null) GameManager.PLAYER = playerPrefab.GetComponent<Exterior>().Create(transform.position, transform.rotation);
+    }
 }
