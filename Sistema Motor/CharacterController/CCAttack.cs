@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Attack", menuName = "Motor/CharacterController/Attack", order = 0)]
-    public class CCAttack : CCAndar
+    public class CCAttack : CCWalk
     {
         Dictionary<Motor, bool> waiting = new Dictionary<Motor, bool>();
 
@@ -54,7 +54,7 @@ namespace Game.MotorSystem
 
         //public override MotorEstado Transition(Motor motor) { return null; }
 
-        public override MotorEstado GetNextState(Motor motor)
+        public override MotorState GetNextState(Motor motor)
         {
             return null;
         }

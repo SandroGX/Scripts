@@ -70,7 +70,7 @@ public class Statistic
     {
         UnityEditor.EditorGUILayout.BeginHorizontal();
 
-        value = UnityEditor.EditorGUILayout.FloatField("Value: ", value);
+        value = UnityEditor.EditorGUILayout.Slider("Value: ", value, minValue, maxValue);
         minValue = UnityEditor.EditorGUILayout.FloatField("Min Value: ", minValue);
         maxValue = UnityEditor.EditorGUILayout.FloatField("Max Value: ", maxValue);
         varValue = UnityEditor.EditorGUILayout.FloatField("Var Value: ", varValue);

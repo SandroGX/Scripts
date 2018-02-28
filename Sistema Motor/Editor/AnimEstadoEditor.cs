@@ -7,7 +7,7 @@ public class AnimEstadoEditor : Editor
 {
     bool mostrar;
 
-    [CustomEditor(typeof(AnimEstado))]
+    [CustomEditor(typeof(AnimState))]
     public override void OnInspectorGUI()
     {
         //AnimEstado myTarget = (AnimEstado)target;

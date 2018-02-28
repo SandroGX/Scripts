@@ -8,15 +8,14 @@ using Game;
 using Game.InventorySystem;
 
 [System.Serializable]
-public class Damager : ItemComponent, IExterior, IAtivavel
+public class Damager : ItemComponent, IExterior, IActivatable
 {
     public string Name { get { return name; } }
-    public bool isActive { get; set; }
+    public bool IsActive { get; set; }
 
     public Damage damageToGive;
     public List<string> hitboxesName;
     public List<Hitbox> hitboxes = new List<Hitbox>();
-
 
 
     public void OnCreate()
@@ -25,19 +24,17 @@ public class Damager : ItemComponent, IExterior, IAtivavel
     }
 
 
-
     public override void OnDuplicate()
     {
         hitboxes.Clear();
     }
 
 
-
     public void Activate(bool activate)
     {
-        if (activate == isActive) return;
+        if (activate == IsActive) return;
 
-        isActive = activate;
+        IsActive = activate;
 
         foreach(Hitbox h in hitboxes)
         {

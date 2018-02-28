@@ -16,7 +16,6 @@ public class Damageable
         else return false;
     }
 
-
     public void ReceiveDamage(Damage damage)
     {
         life.Add(-damage.damage);

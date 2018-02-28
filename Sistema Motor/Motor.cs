@@ -21,20 +21,20 @@ namespace Game.MotorSystem
         [HideInInspector]
         public Vector3 input, lookDir, target, rawPlatformVelocity, rawPlatformAngVelocity;
         //[HideInInspector]
-        public Vector3 velocity, movementVelocity, platformVelocity, fallVelocity; //em metros/fixedUpdate
+        public Vector3 velocity, movementVelocity, platformVelocity, fallVelocity; //in meters/fixedUpdate
         [HideInInspector]
-        public Vector3 angularVelocity, movementAngVelocity, platformAngVelocity; //em angulos/fixedUpdate
+        public Vector3 angularVelocity, movementAngVelocity, platformAngVelocity; //in angles/fixedUpdate
         public Vector3 gravity = Physics.gravity, surfaceNormal;
         [HideInInspector]
         public bool isStarted, processedOnce, isGrounded, lookAtTarget;
         public float surfaceStaticFriction, surfaceDynamicFriction;
 
-        public Dictionary<string, IAtivavel> ativaveis = new Dictionary<string, IAtivavel>();
+        public Dictionary<string, IActivatable> activatables = new Dictionary<string, IActivatable>();
 
-        public MotorEstado currentState;
-        public MotorEstado nextState;
+        public MotorState currentState;
+        public MotorState nextState;
         [SerializeField]
-        public MotorEstado defaultState;
+        public MotorState defaultState;
 
 
         protected virtual void Awake()
@@ -70,15 +70,15 @@ namespace Game.MotorSystem
             currentState.ProcessMovement(this); processedOnce = true;
             velocity = movementVelocity + platformVelocity + fallVelocity;
             angularVelocity = movementAngVelocity + platformAngVelocity;
-            anim.SetFloat("Velocidade", velocity.magnitude / Time.fixedDeltaTime);
-            anim.SetFloat("Velocidade Angular", angularVelocity.y / Time.fixedDeltaTime);
+            anim.SetFloat("Velocity", velocity.magnitude / Time.fixedDeltaTime);
+            anim.SetFloat("Angular Velocity", angularVelocity.y / Time.fixedDeltaTime);
             anim.SetBool("C == N", currentState == nextState);
 
             //Debug.DrawRay(transform.position, velocity / Time.fixedDeltaTime, Color.yellow);
         }
 
 
-        public void ChangeState(MotorEstado state)
+        public void ChangeState(MotorState state)
         {
             if (!state || currentState == state) return;
             
@@ -120,31 +120,31 @@ namespace Game.MotorSystem
 
         public void Activate(string toActivate)
         {
-            ativaveis[toActivate].Activate(true);
+            activatables[toActivate].Activate(true);
         }
 
         public void Deactivate(string toDeactivate)
         {
-            ativaveis[toDeactivate].Activate(false);
+            activatables[toDeactivate].Activate(false);
         }
 
 
-        public void GetAtivaveisComNome(string n, Action<string> acao)
+        public void GetAtivatablesWithName(string n, Action<string> toDo)
         {
-            foreach (string a in ativaveis.Keys)
+            foreach (string a in activatables.Keys)
             {
-                if (a.Contains(n)) acao(a);
+                if (a.Contains(n)) toDo(a);
             }
         }
 
-        public void AtivarTodosComNome(string aAtivar)
+        public void ActivateAllWithName(string toActivate)
         {
-            GetAtivaveisComNome(aAtivar, x => ativaveis[x].Activate(true));
+            GetAtivatablesWithName(toActivate, x => activatables[x].Activate(true));
         }
 
-        public void DesativarTodosComNome(string aDesativar)
+        public void DeactivateAllWithName(string toDeactivate)
         {
-            GetAtivaveisComNome(aDesativar, x => ativaveis[x].Activate(false));
+            GetAtivatablesWithName(toDeactivate, x => activatables[x].Activate(false));
 
         }
 

@@ -9,56 +9,46 @@ public class SlotMotor : Slot, IExterior
 
     protected Motor motor;
 
-    public override void OnDuplicate()
-    {
-        base.OnDuplicate();
-    }
-
     protected override void OnInsert(Item aPor)
     {
-        AoPorExterior(aPor);
+        SetExterior(aPor);
     }
 
 
-    protected virtual void AoPorExterior(Item aPor)
+    protected virtual void SetExterior(Item toSet)
     {
-        if (aPor && motor)
+        if (toSet && motor)
         {
-            foreach (ItemComponent c in aPor.components)
+            foreach (ItemComponent c in toSet.components)
             {
-                IAtivavel a = c as IAtivavel;
+                IActivatable a = c as IActivatable;
 
-                if (a != null)
-                    motor.ativaveis.Add(name + a.Name, a);
-                
+                if (a != null) motor.activatables.Add(name + a.Name, a);
             }
         }
     }
 
 
 
-    protected override void AoRetirar(Item aRetirar)
+    protected override void OnWithDraw(Item aRetirar)
     {
-        AoRetirarExterior(aRetirar);
+        ResetExterior(aRetirar);
     }
 
 
-    protected virtual void AoRetirarExterior(Item aRetirar)
+    protected virtual void ResetExterior(Item aRetirar)
     {
         if (aRetirar && motor)
-        {
-            motor.GetAtivaveisComNome(name, x => motor.ativaveis.Remove(x));
-        }
+            motor.GetAtivatablesWithName(name, x => motor.activatables.Remove(x));
+        
     }
-
 
 
     public virtual void OnCreate()
     {
         motor = item.holder.GetComponent<Motor>();
 
-        AoPorExterior(inserted);
-
+        SetExterior(inserted);
     }
 
 }

@@ -7,7 +7,7 @@ public class MultiSpawner : MonoBehaviour
 {
     public Item[] items;
     public GameObject[] gameObjects;
-    public int maxSpawn, maxSpawnPerInterval, initialSpawn, toSpawnPerInterval;
+    public int maxTotalSpawnEver, maxSpawnedInInterval, initialSpawn, toSpawnPerInterval;
     int totalSpawn;
     public float spawnTimeInterval;
     List<int> usedPositions = new List<int>();
@@ -45,7 +45,7 @@ public class MultiSpawner : MonoBehaviour
 
     bool ShouldSpawn()
     {
-        return (totalSpawn < maxSpawn || maxSpawn == 0) && spawnedGameObjects.Count < maxSpawnPerInterval;
+        return (totalSpawn < maxTotalSpawnEver || maxTotalSpawnEver == 0) && spawnedGameObjects.Count < maxSpawnedInInterval;
     }
 
 

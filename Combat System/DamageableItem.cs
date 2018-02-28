@@ -15,13 +15,11 @@ public class DamageableItem : ItemComponent, IExterior
     List<string> hitboxesName;
     public List<Hitbox> hitboxes = new List<Hitbox>();
 
-
     public override void OnDuplicate()
     {
         damageable = new Damageable(damageable);
         hitboxes.Clear();
     }
-
 
 
     public void OnCreate()
@@ -36,12 +34,10 @@ public class DamageableItem : ItemComponent, IExterior
     }
 
 
-
     public void ReceiveDamage(HitInfo info)
     {
         damageable.ReceiveDamage(info.damage);
     }
-
 
 
     void OnDestroy()
@@ -51,9 +47,7 @@ public class DamageableItem : ItemComponent, IExterior
 
     }
 
-
 #if UNITY_EDITOR
-
     Exterior exterior;
     public int size = 1;
 

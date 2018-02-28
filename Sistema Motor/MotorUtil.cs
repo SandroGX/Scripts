@@ -7,58 +7,58 @@ namespace Game.MotorSystem
     public static class MotorUtil
     {
 
-        public static Vector3 MovUniVar(Vector3 velAtual, Vector3 velDesejada, float velMin, float velMax, float acelMin, float acelMax)
+        public static Vector3 MovUniVar(Vector3 crrVel, Vector3 desVel, float minVel, float maxVel, float minAcel, float maxAcel)
         {
-            velDesejada = Mathf.Clamp(velDesejada.magnitude, velMin, velMax) * velDesejada.normalized;
+            desVel = Mathf.Clamp(desVel.magnitude, minVel, maxVel) * desVel.normalized;
 
-            Vector3 acelDes = velDesejada - velAtual;
+            Vector3 acelDes = desVel - crrVel;
 
-            acelDes = Mathf.Clamp(acelDes.magnitude, acelMin, acelMax) * acelDes.normalized;
+            acelDes = Mathf.Clamp(acelDes.magnitude, minAcel, maxAcel) * acelDes.normalized;
 
-            return velAtual + acelDes;
+            return crrVel + acelDes;
         }
 
-        public static float MovUniVar(float velAtual, float velDesejada, float velMin, float velMax, float acelMin, float acelMax)
+        public static float MovUniVar(float crrVel, float desVel, float minVel, float maxVel, float minAcel, float maxAcel)
         {
-            velDesejada = Mathf.Clamp(Mathf.Abs(velDesejada), velMin, velMax) * Mathf.Sign(velDesejada);
+            desVel = Mathf.Clamp(Mathf.Abs(desVel), minVel, maxVel) * Mathf.Sign(desVel);
             
-            float acelDes = velDesejada - velAtual;
+            float acelDes = desVel - crrVel;
 
-            acelDes = Mathf.Clamp(Mathf.Abs(acelDes), acelMin, acelMax) * Mathf.Sign(acelDes);
+            acelDes = Mathf.Clamp(Mathf.Abs(acelDes), minAcel, maxAcel) * Mathf.Sign(acelDes);
             
-            return velAtual + acelDes;
+            return crrVel + acelDes;
         }
 
-        public static Vector3 MovUniVar(Vector3 velAtual, Vector3 velDesejada, float velMin, float velMax, float acelMin, float acelMax, float time)
+        public static Vector3 MovUniVar(Vector3 crrVel, Vector3 desVel, float minVel, float maxVel, float minAcel, float maxAcel, float time)
         {
-            return MovUniVar(velAtual, velDesejada * time, velMin * time, velMax * time, acelMin * time * time, acelMax * time * time);
+            return MovUniVar(crrVel, desVel * time, minVel * time, maxVel * time, minAcel * time * time, maxAcel * time * time);
         }
 
-        public static float MovUniVar(float velAtual, float velDesejada, float velMin, float velMax, float acelMin, float acelMax, float time)
+        public static float MovUniVar(float crrVel, float desVel, float minVel, float maxVel, float minAcel, float maxAcel, float time)
         {
-            return MovUniVar(velAtual, velDesejada * time, velMin * time, velMax * time, acelMin * time * time, acelMax * time * time);
+            return MovUniVar(crrVel, desVel * time, minVel * time, maxVel * time, minAcel * time * time, maxAcel * time * time);
         }
 
    
-        public static float GetAngleWithSignal(Vector3 origem, Vector3 destino)
+        public static float GetAngleWithSignal(Vector3 origin, Vector3 destiny)
         {
-            Vector3 perp = Vector3.Cross(destino, origem).normalized;
+            Vector3 perp = Vector3.Cross(destiny, origin).normalized;
 
             perp.x = Mathf.Abs(perp.x);
             perp.y = Mathf.Abs(perp.y);
             perp.z = Mathf.Abs(perp.z);
 
-            return Vector3.Angle(origem, destino) * Mathf.Sign(Vector3.Dot(destino, Quaternion.AngleAxis(90, perp) * origem));
+            return Vector3.Angle(origin, destiny) * Mathf.Sign(Vector3.Dot(destiny, Quaternion.AngleAxis(90, perp) * origin));
         }
 
 
-        public static void NavAgent(Motor motor, MovimentoBasico mB)
+        public static void NavAgent(Motor motor, BasicMovement bM)
         {
             if (motor.navAgent)
             {
-                motor.navAgent.speed = mB.velMax;
-                motor.navAgent.angularSpeed = mB.velAngMax;
-                motor.navAgent.acceleration = mB.acelMax;
+                motor.navAgent.speed = bM.maxVel;
+                motor.navAgent.angularSpeed = bM.maxAngVel;
+                motor.navAgent.acceleration = bM.maxAcel;
             }
         }
 

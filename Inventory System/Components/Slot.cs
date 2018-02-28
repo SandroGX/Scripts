@@ -35,7 +35,7 @@ namespace Game.InventorySystem
                 else inserted = Default;
 
                 OnInsert(inserted);
-                AoRetirar(toRemove);
+                OnWithDraw(toRemove);
             }
             else toRemove = null;
         }
@@ -53,7 +53,7 @@ namespace Game.InventorySystem
         }
 
 
-        protected virtual void AoRetirar(Item toRemove)
+        protected virtual void OnWithDraw(Item toWithDraw)
         {
 
         }

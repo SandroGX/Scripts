@@ -8,7 +8,7 @@ namespace Game.InventorySystem
 {
     public class ItemEditor : EditorWindow
     {
-        string novoCompTipo = Item.allComponents[0];
+        string newCompType = Item.allComponents[0];
 
         Item item;
 
@@ -29,38 +29,32 @@ namespace Game.InventorySystem
             if (item)
             {
                 item.OnGui();
-
                 GUILayout.BeginHorizontal();
-
-                novoCompTipo = Item.allComponents[EditorGUILayout.Popup(Item.allComponents.IndexOf(novoCompTipo), Item.allComponents.ToArray())];
-
-                if(GUILayout.Button("Criar componente"))
+    
+                newCompType = Item.allComponents[EditorGUILayout.Popup(Item.allComponents.IndexOf(newCompType), Item.allComponents.ToArray())];
+                if(GUILayout.Button("Create component"))
                 {
-                    ItemComponent c = CreateInstance(novoCompTipo) as ItemComponent;
-
+                    ItemComponent c = CreateInstance(newCompType) as ItemComponent;
                     if (c)
                     {
-                        item.components.Add(c);
                         c.item = item;
-                        c.name = "Novo " + c.GetType().ToString(); 
-                        AssetDatabase.AddObjectToAsset(c, item);
+                        c.name = "New " + c.GetType().ToString();
+                        SODatabase.Add(item, c, item.components);
                     }
                 }
 
                 GUILayout.EndHorizontal();
 
-                if (GUILayout.Button("Guardar"))
+                if (GUILayout.Button("Save"))
                 {
                     EditorUtility.SetDirty(item);
-
-                    foreach (ItemComponent c in item.components)
-                        EditorUtility.SetDirty(c);
+                    foreach (ItemComponent c in item.components) EditorUtility.SetDirty(c);
                 }
             }
             else
             {
 
-                EditorGUILayout.LabelField("Escolhe um item");
+                EditorGUILayout.LabelField("Choose an Item");
 
                 item = Selection.activeObject as Item;
             }

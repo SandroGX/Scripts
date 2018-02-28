@@ -11,8 +11,8 @@ public class Player : MonoBehaviour
     [HideInInspector]
     public Motor motor;
 
-    Camara camara;
-    public Transform camaraTargetPlayer;
+    PlayerCamera playerCamera;
+    public Transform camTargetTransform;
 
     public Control[] controls;
     [HideInInspector]
@@ -28,8 +28,8 @@ public class Player : MonoBehaviour
     {
         GameManager.PLAYER = gameObject;
         motor = GetComponent<Motor>();
-        camara = Camera.main.GetComponent<Camara>();
-        camaraTargetPlayer = transform.Find("Camara Alvo");
+        playerCamera = Camera.main.GetComponent<PlayerCamera>();
+        playerCamera.SetCamTarget(camTargetTransform);
         foreach (Control c in controls) c.player = this;
         //character = GetComponent<Game.SistemaInventario.ItemHolder>().item.GetComponent<Character>();
         //ui = GameObject.Find("PlayerUI").GetComponent<PlayerUI>();
@@ -39,9 +39,6 @@ public class Player : MonoBehaviour
     void Start()
     {
         motor.MotorStart();
-        camara.OlharSeguirAlvo(camaraTargetPlayer.position);
-        camara.rotX = transform.eulerAngles.x;
-        camara.rotY = transform.eulerAngles.y;
     }
 
 
@@ -60,23 +57,19 @@ public class Player : MonoBehaviour
 
         time += Time.deltaTime;
         foreach (Control c in controls) c.Action(motor);
-
-        camara.OlharSeguirAlvo(camaraTargetPlayer.position);
     }
 
 
     Vector3 Input()
     {
-        Vector3 i = new Vector2(UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis("Vertical"));
+        Vector2 i = new Vector2(UnityEngine.Input.GetAxis("Horizontal"), UnityEngine.Input.GetAxis("Vertical"));
         i = (i.magnitude > 1) ? i.normalized : i;
 
         switch (s)
         {
-            case S.XZ: i = camara.transform.rotation * new Vector3(i.x, 0, i.y); break;
-            case S.XY: i = camara.transform.rotation * new Vector3(i.x, i.y, 0); break;
-            case S.FF: default: i = camara.transform.right * i.x + camara.transform.forward * i.y; break;
+            case S.XZ: return playerCamera.transform.rotation * new Vector3(i.x, 0, i.y);
+            case S.XY: return playerCamera.transform.rotation * new Vector3(i.x, i.y, 0);
+            case S.FF: default: return playerCamera.transform.right * i.x + playerCamera.transform.forward * i.y;
         }
-
-        return i;
     }
 }

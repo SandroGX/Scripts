@@ -15,7 +15,7 @@ public class Character : ItemComponent, IExterior
     public Statistic balance, stamina;
     public bool tired = false;
 
-    public MotorEstado BalanceLost, Fall;
+    public MotorState BalanceLost, Fall;
     Motor motor;
 
     public List<Character> friend = new List<Character>();
@@ -30,7 +30,6 @@ public class Character : ItemComponent, IExterior
         stamina.Max += OnStaminaRecovered;
         stamina.Min += OnStaminaDepleted;   
     }
-
 
 
     public void OnCreate()

@@ -54,14 +54,21 @@ namespace Game.InventorySystem
         {
             if (components.Count == 0) return null;
             if (components.Count == 1) return components[0] as T;
-            return components.Where(x => x as T != null).First() as T;
+            return components.Where(x => x is T).First() as T;
+        }
+
+        public ItemComponent GetComponent(System.Type t)
+        {
+            if (components.Count == 0) return null;
+            if (components.Count == 1) return components[0];
+            return components.Where(x => x.GetType().Equals(t)).First();
         }
 
         public T[] GetComponents<T>() where T : ItemComponent
         {
             if (components.Count == 0) return null;
             if (components.Count == 1) return new T[] { components[0] as T };
-            return components.Where(x => x as T != null).Select(x => x as T).ToArray();
+            return components.Where(x => x is T).Select(x => x as T).ToArray();
         }
 
 

@@ -5,7 +5,7 @@ using Game.MotorSystem;
 namespace Game.MotorSystem
 {
     [CreateAssetMenu(fileName = "Instant Accelaration", menuName = "Motor/Instant Accelaration", order = 1)]
-    public class InstantAccelaration : MotorEstado
+    public class InstantAccelaration : MotorState
     {
         public float accelaration = 5;
 

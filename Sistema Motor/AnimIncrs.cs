@@ -4,7 +4,7 @@ using UnityEngine;
 using Game.MotorSystem;
 
 [CreateAssetMenu(fileName = "AnimIncrs", menuName = "Motor/AnimIncrs", order = 2)]
-public class AnimIncrs : AnimEstado
+public class AnimIncrs : AnimState
 {
     public string param;
     public int max;

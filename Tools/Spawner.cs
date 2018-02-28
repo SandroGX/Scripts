@@ -10,7 +10,7 @@ public class Spawner : MonoBehaviour
 {
     public int number;
     public GameObject prefab;
-    public Vector2 dimensions = new Vector2(2, 2);
+    public Vector2 dimensions = new Vector2(200, 200);
     public float minimunDistanceFromOthes = 5;
     public float maxAngle = 30;
     public bool followSurfaceNormal = true;

@@ -11,9 +11,9 @@ public class Control
     public enum VerbType { In, On, Off }
     public VerbType verb;
 
-    public MotorEstado defaultState;
-    public MotorEstado exitState;
-    public Dictionary<MotorEstado, MotorEstado> nextState = new Dictionary<MotorEstado, MotorEstado>();
+    public MotorState defaultState;
+    public MotorState exitState;
+    public Dictionary<MotorState, MotorState> nextState = new Dictionary<MotorState, MotorState>();
 
     public string control;
     public float comboTimeMax;
@@ -32,7 +32,7 @@ public class Control
     }
 
 
-    MotorEstado Next(MotorEstado current)
+    MotorState Next(MotorState current)
     {
         if (nextState.ContainsKey(current)) return nextState[current];
         else return defaultState;

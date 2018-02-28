@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public class Anim
 {
-    public string paramNome;
+    public string paramName;
 
     public enum VarType { Float, Int, Bool, Trigger };
 
@@ -18,14 +18,14 @@ public class Anim
 
     public void SetParam(Animator anim)
     {
-        if (paramNome != "")
+        if (paramName != "")
         {
             switch (Var)
             {
-                case VarType.Float: anim.SetFloat(paramNome, Float); break;
-                case VarType.Int: anim.SetInteger(paramNome, Integer); break;
-                case VarType.Bool: anim.SetBool(paramNome, Boolean); break;
-                case VarType.Trigger: anim.SetTrigger(paramNome); break;
+                case VarType.Float: anim.SetFloat(paramName, Float); break;
+                case VarType.Int: anim.SetInteger(paramName, Integer); break;
+                case VarType.Bool: anim.SetBool(paramName, Boolean); break;
+                case VarType.Trigger: anim.SetTrigger(paramName); break;
 
             }
         }
@@ -33,13 +33,13 @@ public class Anim
 
     public void ResetParam(Animator anim)
     {
-        if (paramNome != "")
+        if (paramName != "")
         {
             switch (Var)
             {
-                case VarType.Float: anim.SetFloat(paramNome, 0); break;
-                case VarType.Int: anim.SetInteger(paramNome, 0); break;
-                case VarType.Bool: anim.SetBool(paramNome, !Boolean); break;
+                case VarType.Float: anim.SetFloat(paramName, 0); break;
+                case VarType.Int: anim.SetInteger(paramName, 0); break;
+                case VarType.Bool: anim.SetBool(paramName, !Boolean); break;
             }
         }
     }
