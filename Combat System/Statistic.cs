@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
@@ -49,9 +48,9 @@ public class Statistic
     {
         while (true)
         {
-            value += varValue * GameManager.STAT_VAR_TIME;
+            value += varValue * Game.GameManager.STAT_VAR_TIME;
             Limits();
-            yield return new WaitForSeconds(GameManager.STAT_VAR_TIME);
+            yield return new WaitForSeconds(Game.GameManager.STAT_VAR_TIME);
         }
 
     }
@@ -62,6 +61,13 @@ public class Statistic
         value = Mathf.Clamp(value, minValue, maxValue);
         if (value == minValue && Min != null) { Min(); }
         if (value == maxValue && Max != null) {Max(); }
+    }
+
+
+    public static implicit operator bool(Statistic s)
+    {
+        if (s != null) return true;
+        else return false;
     }
 
 
@@ -77,6 +83,5 @@ public class Statistic
 
         UnityEditor.EditorGUILayout.EndHorizontal();
     }
-
 #endif 
 }

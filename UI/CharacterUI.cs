@@ -18,7 +18,7 @@ public class CharacterUI : MonoBehaviour
     {
         if (!character) return;
 
-        Bar(lifeBar, lifeText, "Life", character.damageable.damageable.life.value, character.damageable.damageable.life.maxValue, false);
+        Bar(lifeBar, lifeText, "Life", character.damageable.Life.value, character.damageable.Life.maxValue, false);
         Bar(staminaBar, staminaText, "Stamina", character.stamina.value, character.stamina.maxValue, false);
 
         SetStaminaColor();

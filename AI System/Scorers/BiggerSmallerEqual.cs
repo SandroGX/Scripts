@@ -18,9 +18,9 @@ namespace Game.AISystem
         protected float toCompare;
         [SerializeField] protected float comparer, comparer2; //min, max
 
-        public override int CalculateScore(AISController ai)
+        public override int CalculateScore(AISController ctrl)
         {
-            if (comp <= Comparison.BetweenIn) return base.CalculateScore(ai);
+            if (comp <= Comparison.BetweenIn) return base.CalculateScore(ctrl);
 
             float t = toCompare - comparer / comparer2 - comparer;
             switch (comp)
@@ -32,7 +32,7 @@ namespace Game.AISystem
         }
 
 
-        protected override bool Evaluate(AISController ai)
+        protected override bool Evaluate(AISController ctrl)
         {
             switch (comp)
             {

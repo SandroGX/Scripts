@@ -6,7 +6,7 @@ namespace Game.InventorySystem
 {
     public interface IExterior
     {
-        void OnCreate();
-        //void OnDestroyed();
+        void OnExteriorConnect();
+        void OnExteriorDisconnect();
     }
 }

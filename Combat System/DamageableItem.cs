@@ -1,66 +1,38 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using Game;
-using Game.InventorySystem;
+﻿using Game.InventorySystem;
 
-public class DamageableItem : ItemComponent, IExterior
+public class DamageableItem : ItemComponent, IDamageable, IExterior
 {
-    public Damageable damageable;
-
-    [SerializeField]
-    List<string> hitboxesName;
-    public List<Hitbox> hitboxes = new List<Hitbox>();
+    public Statistic Life { get { return life; } }
+    public Statistic life;
+    
 
     public override void OnDuplicate()
     {
-        damageable = new Damageable(damageable);
-        hitboxes.Clear();
+        life = new Statistic(life);
     }
 
-
-    public void OnCreate()
+    public void OnExteriorConnect()
     {
-
-        hitboxes = item.holder.GetHolderComponents<Hitbox>(hitboxesName.ToArray());
-
-        foreach (Hitbox h in hitboxes) h.OnHitEnter += ReceiveDamage;
-        
-        item.holder.StartCoroutine(damageable.life.Variation());
-
+        item.holder.StartCoroutine(life.Variation());
     }
 
-
-    public void ReceiveDamage(HitInfo info)
+    public void OnExteriorDisconnect()
     {
-        damageable.ReceiveDamage(info.damage);
+        item.holder.StopCoroutine(life.Variation());
     }
 
-
-    void OnDestroy()
+    public void ReceiveDamage(Damage dam)
     {
-        foreach (Hitbox h in hitboxes)
-            h.OnHitEnter -= ReceiveDamage;
-
+        life.Add(-dam.damage);
     }
 
 #if UNITY_EDITOR
-    Exterior exterior;
-    public int size = 1;
-
     public override void GuiParameters()
     {
         base.GuiParameters();
 
-        if (damageable) damageable.Gui();
-        else damageable = new Damageable();
-
-        if (exterior) Exterior.GetComponentsNames<Hitbox>(exterior, ref size, hitboxesName);
-        else exterior = item.GetComponent<Exterior>();
-
+        if (life) life.Gui();
+        else life = new Statistic();
     }
 #endif
 

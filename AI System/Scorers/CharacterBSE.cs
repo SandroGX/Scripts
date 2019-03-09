@@ -37,8 +37,8 @@ namespace Game.AISystem
 
             switch (toComp)
             {
-                case ToCompare.damage:              toCompare = character.damageable.damageable.life.value; break;
-                case ToCompare.damage_Percentage:   toCompare = (character.damageable.damageable.life.value / character.damageable.damageable.life.maxValue) * 100; break;
+                case ToCompare.damage:              toCompare = character.damageable.Life.value; break;
+                case ToCompare.damage_Percentage:   toCompare = (character.damageable.Life.value / character.damageable.Life.maxValue) * 100; break;
                 case ToCompare.stamina:             toCompare = character.stamina.value; break;
                 case ToCompare.stamina_Percentage:  toCompare = (character.stamina.value / character.stamina.maxValue) * 100; break;
             }

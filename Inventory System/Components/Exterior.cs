@@ -17,80 +17,82 @@ namespace Game.InventorySystem
         Material materialOverride;
 
 
-        public override void OnDuplicate()
-        {
-            exterior = null;
-        }
-
-
         public GameObject Create(Vector3 position)
         {
             GameObject g = Instantiate(original, position, Quaternion.identity);
-            CreateItem(g);
+            ConnectToExterior(g);
             return g;
         }
 
         public GameObject Create(Vector3 position, Quaternion rotation)
         {
             GameObject g = Instantiate(original, position, rotation);
-            CreateItem(g);
+            ConnectToExterior(g);
             return g;
         }
 
         public GameObject Create(Transform parent)
         {
             GameObject g = Instantiate(original, parent);
-            CreateItem(g);
+            ConnectToExterior(g);
             return g;
         }
 
         public GameObject Create(Transform parent, bool instantiateInWorldSpace = false)
         {
             GameObject g = Instantiate(original, parent, instantiateInWorldSpace);
-            CreateItem(g);
+            ConnectToExterior(g);
             return g;
         }
 
         public GameObject Create(Vector3 position, Quaternion rotation, Transform parent)
         {
             GameObject g = Instantiate(original, position, rotation, parent);
-            CreateItem(g);
+            ConnectToExterior(g);
             return g;
         }
 
 
-        void CreateItem(GameObject g)
+        private void ConnectToExterior(GameObject g)
         {
 
             ItemHolder h = g.AddComponent<ItemHolder>();
 
-            Item i;
-            if (!item.original)i = Item.Duplicate(item);
-            else i = item;
+            Item i = !item.original ? Item.Duplicate(item) : i = item;
 
             i.holder = h;
             h.item = i;
 
+            foreach (ItemComponentInterface c in h.GetComponents<ItemComponentInterface>())
+                c.ConnectItem(i);
+
             foreach (ItemComponent c in i.components)
             {
                 IExterior e = c as IExterior;
-                if(e != null) e.OnCreate();
+                if(e != null) e.OnExteriorConnect();
             }
+
 
             if (materialOverride) g.GetComponent<MeshRenderer>().material = materialOverride;
         }
 
-        public void OnCreate()
-        {
-            exterior = item.holder.gameObject;
-        }
+        public void OnExteriorConnect() { exterior = item.holder.gameObject; }
 
 
-        public void Destroy()
+        public void DestroyExterior()
         {
             Destroy(exterior);
+
+            foreach (IExterior c in item.components)
+                c.OnExteriorDisconnect();
+
+            item.holder = null;
         }
 
+        public void OnExteriorDisconnect() { exterior = null; }
+
+
+        public override void OnDuplicate() { exterior = null; }
 
 #if UNITY_EDITOR
 
@@ -118,32 +120,29 @@ namespace Game.InventorySystem
         }
 
 
-        public void Opcoes<T>(ref int size, List<string> names) where T : Component
+        public void Options<T>(ref int size, List<string> names) where T : Component
         {
             List<string> options = GetHolderComponentNames<T>();
 
-            if (options != null && options.Count != 0)
+            if(options != null && options.Count != 0)
             {
                 EditorGUILayout.LabelField("Max: " + options.Count);
 
-                if (size >= options.Count) size = options.Count;
+                if(size > options.Count) size = options.Count;
 
-                if (size < names.Count)
+                if(size < names.Count)
                 {
                     names.RemoveRange(size, names.Count - size);
                     size = names.Count;
                 }
 
-                for (int i = 0; i < size; i++)
+                for(int i = 0; i < size; i++)
                 {
-                    int a;
+                    if(i >= names.Count) names.Add("");
 
-                    if (i >= names.Count) names.Add("");
+                    int selected = options.Contains(names[i]) ? selected = options.IndexOf(names[i]) : 0;
 
-                    if (options.Contains(names[i])) a = options.IndexOf(names[i]);
-                    else a = 0;
-
-                    names[i] = options[EditorGUILayout.Popup(typeof(T).ToString() + i + ": ", a, options.ToArray())];
+                    names[i] = options[EditorGUILayout.Popup(typeof(T).ToString() + i + ": ", selected, options.ToArray())];
                 }
             }
             else
@@ -153,44 +152,36 @@ namespace Game.InventorySystem
         }
 
 
-        public static void GetComponentsNames<T>(Exterior exterior, ref int size, List<string> names) where T : Component
+        public static void GetComponentsNames<T>(Item item, ref int size, List<string> names) where T : Component
         {
-
-            if (exterior)
+            try
             {
+                Exterior exterior = item.GetComponent<Exterior>();
+
                 int s = EditorGUILayout.IntField("Size: ", size);
 
                 if (s > 0) size = s;
 
-                exterior.Opcoes<T>(ref size, names);
-
-                //size = names.Length;
+                exterior.Options<T>(ref size, names);
             }
-            else
-                EditorGUILayout.LabelField("Precisa de um componente do tipo Exterior");
+            catch (NullReferenceException) { EditorGUILayout.LabelField("Need Exterior type component"); }
             
         }
 
 
-        public static void GetComponentsName<T>(Exterior exterior, ref string name) where T : Component
+        public static void GetComponentName<T>(Item item, ref string name) where T : Component
         {
-
-            if (exterior)
+            try
             {
-                List<string> opcoes = exterior.GetHolderComponentNames<T>();
+                Exterior exterior = item.GetComponent<Exterior>();
 
-                int a;
+                List<string> options = exterior.GetHolderComponentNames<T>();
 
-                if (opcoes.Contains(name))
-                    a = opcoes.IndexOf(name);
-                else a = 0;
+                int selectedIdx = options.Contains(name) ? options.IndexOf(name) : 0;
 
-                name = opcoes[EditorGUILayout.Popup(typeof(T).ToString() + ": ", a, opcoes.ToArray())];
+                name = options[EditorGUILayout.Popup(typeof(T).ToString() + ": ", selectedIdx, options.ToArray())];
             }
-            else
-            {
-                EditorGUILayout.LabelField("Precisa de um componente do tipo Exterior");
-            }
+            catch (NullReferenceException) { EditorGUILayout.LabelField("Need Exterior type component"); }
         }
 
 #endif 

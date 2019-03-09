@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif 
@@ -15,9 +13,6 @@ public class Character : ItemComponent, IExterior
     public Statistic balance, stamina;
     public bool tired = false;
 
-    public MotorState BalanceLost, Fall;
-    Motor motor;
-
     public List<Character> friend = new List<Character>();
     public List<Character> enemy = new List<Character>();
 
@@ -27,18 +22,24 @@ public class Character : ItemComponent, IExterior
         damageable = item.GetComponent<DamageableItem>();
         balance = new Statistic(balance);
         stamina = new Statistic(stamina);
+        damageable.Life.Min += Death;
         stamina.Max += OnStaminaRecovered;
         stamina.Min += OnStaminaDepleted;   
     }
 
 
-    public void OnCreate()
+    public void OnExteriorConnect()
     {
-        motor = item.holder.gameObject.GetComponent<Motor>();
         item.holder.StartCoroutine(stamina.Variation());
         item.holder.StartCoroutine(balance.Variation());
-        damageable.damageable.life.Min += Death;
-        damageable.damageable.life.Min += item.holder.Destroy;
+        damageable.Life.Min += item.holder.Destroy;
+    }
+
+    public void OnExteriorDisconnect()
+    {
+        item.holder.StopCoroutine(stamina.Variation());
+        item.holder.StopCoroutine(balance.Variation());
+        damageable.Life.Min -= item.holder.Destroy;
     }
 
 

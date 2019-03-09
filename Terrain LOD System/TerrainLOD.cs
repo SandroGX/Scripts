@@ -8,7 +8,6 @@ namespace Game.TerrainLODSystem
     {
 
         public Vector3Int ID;
-        public bool blender;
         GameObject hi;
         GameObject lo;
         GameObject wallF;
@@ -19,24 +18,16 @@ namespace Game.TerrainLODSystem
         GameObject wallD;
 
 
-        void Awake()
+        private void Awake()
         {
-
             if (transform.childCount == 2 || transform.childCount == 8)
             {
                 hi = transform.GetChild(0).gameObject;
                 lo = transform.GetChild(1).gameObject;
+                hi.name = "HI";
+                lo.name = "LO";
 
-                if (transform.childCount == 2)
-                {
-                    wallF = null;
-                    wallB = null;
-                    wallR = null;
-                    wallL = null;
-                    wallU = null;
-                    wallD = null;
-                }
-                else
+                if (transform.childCount == 8)
                 {
                     wallF = transform.GetChild(2).gameObject;
                     wallB = transform.GetChild(3).gameObject;
@@ -44,39 +35,29 @@ namespace Game.TerrainLODSystem
                     wallL = transform.GetChild(5).gameObject;
                     wallU = transform.GetChild(6).gameObject;
                     wallD = transform.GetChild(7).gameObject;
+
+                    wallF.name = "Wall F";
+                    wallB.name = "Wall B";
+                    wallR.name = "Wall R";
+                    wallL.name = "Wall L";
+                    wallU.name = "Wall U";
+                    wallD.name = "Wall D";
                 }
+                else wallF = wallB = wallR = wallL = wallU = wallD = null;
             }
-            else Debug.LogError("You need 2 mesh for the terrain LOD or 8 for the terrain and walls");
+            else { Debug.LogError("You need 2 mesh for the terrain LOD or 8 for the terrain and walls"); return; }
+
 
             if (hi.GetComponent<MeshCollider>() == null)
                 hi.AddComponent<MeshCollider>();
 
             int m = GetComponentInParent<TerrainLODManager>().minTerrainSize;
 
-            if (blender)
-                ID = new Vector3Int((int)transform.localPosition.x/m, (int)transform.localPosition.z, -((int)transform.localPosition.y/m));
-            else ID = new Vector3Int((int)transform.localPosition.x/m, (int)transform.localPosition.y/m, (int)transform.localPosition.z/m);
+            ID = new Vector3Int((int)transform.localPosition.x/m, (int)transform.localPosition.y/m, (int)transform.localPosition.z/m);
+            gameObject.name = transform.root.gameObject.name + " (" + ID.x + ", " + ID.y + ", " + ID.z + ")";
 
             LOD(2);
             DeactivateWalls();
-
-            gameObject.name = transform.root.gameObject.name + " (" + ID.x + ", " + ID.y + ", " + ID.z + ")";
-
-            if (hi != null) hi.name = "HI " + ID;
-
-            if (lo != null) lo.name = "LO " + ID;
-
-            if (wallF != null) wallF.name = "Wall F " + ID;
-
-            if (wallB != null) wallB.name = "Wall B " + ID;
-
-            if (wallR != null) wallR.name = "Wall R " + ID;
-
-            if (wallL != null) wallL.name = "Wall L " + ID;
-
-            if (wallU != null) wallU.name = "Wall U " + ID;
-
-            if (wallD != null) wallD.name = "Wall D " + ID;
 
         }
 
@@ -101,26 +82,26 @@ namespace Game.TerrainLODSystem
             }
         }
 
-        public void ActivateWall(int[] parede)
+        public void ActivateWall(int[] wall)
         {
             if (transform.childCount == 8)
             {
-                if (ID.z == parede[0]) wallF.SetActive(true);
+                if (ID.z == wall[0]) wallF.SetActive(true);
                 else wallF.SetActive(false);
 
-                if (ID.z == parede[1]) wallB.SetActive(true);
+                if (ID.z == wall[1]) wallB.SetActive(true);
                 else wallB.SetActive(false);
 
-                if (ID.x == parede[2]) wallR.SetActive(true);
+                if (ID.x == wall[2]) wallR.SetActive(true);
                 else wallR.SetActive(false);
 
-                if (ID.x == parede[3]) wallL.SetActive(true);
+                if (ID.x == wall[3]) wallL.SetActive(true);
                 else wallL.SetActive(false);
 
-                if (ID.y == parede[4]) wallU.SetActive(true);
+                if (ID.y == wall[4]) wallU.SetActive(true);
                 else wallU.SetActive(false);
 
-                if (ID.y == parede[5]) wallD.SetActive(true);
+                if (ID.y == wall[5]) wallD.SetActive(true);
                 else wallD.SetActive(false);
             }
 

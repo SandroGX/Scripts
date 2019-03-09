@@ -21,7 +21,7 @@ namespace Game.TerrainLODSystem
 
         void Start()
         {
-            playerCamera = GameObject.FindGameObjectWithTag("Player").transform;
+            playerCamera = Camera.main.transform;
 
             terrains = GetComponentsInChildren<TerrainLOD>();
 

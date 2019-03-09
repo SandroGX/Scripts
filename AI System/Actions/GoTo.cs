@@ -10,10 +10,9 @@ namespace Game.AISystem
     [System.Serializable]
     public class GoTo : AISAction
     {
-        [SerializeField]
-        protected float stopDistance;
+        [SerializeField] protected float stopDistance;
 
-        int destinyIdx = -1;
+        [SerializeField] AISVariable destinyKey;
         protected Dictionary<AISController, Transform> destiny = new Dictionary<AISController, Transform>();
 
 
@@ -21,19 +20,17 @@ namespace Game.AISystem
         {
             base.OnActionEnter(ctrl);
 
-            Transform t = AISEditorUtil.GetSingle<Transform>(ctrl, destinyIdx);
+            Transform t = AISEditorUtil.GetSingleObject<Transform>(ctrl, destinyKey);
             if (!t) return;
 
             destiny.Add(ctrl, t);
-
-            if (!destiny[ctrl]) return;
         }
 
         public override void OnAction(AISController ctrl)
         {
             base.OnAction(ctrl);
 
-            if (!destiny.ContainsKey(ctrl)) return;
+            if (!destiny.ContainsKey(ctrl) || ctrl.navAgent == null) return;
 
             ctrl.navAgent.stoppingDistance = stopDistance;
             ctrl.navAgent.destination = destiny[ctrl].position;
@@ -55,7 +52,7 @@ namespace Game.AISystem
         {
             base.GuiParameters();
 
-            AISEditorUtil.VarPopUp("Destiny:", ai, ref destinyIdx, false, typeof(Transform));
+            destinyKey = AISEditorUtil.VarPopUp("Destiny:", ai, destinyKey, typeof(AISVarSingle), typeof(Transform));
 
             stopDistance = EditorGUILayout.FloatField("Stop distance:", stopDistance);
         }

@@ -13,49 +13,33 @@ namespace Game.InventorySystem
         public Item inserted;
         public Item Default;
 
-
-        public override void OnDuplicate()
-        {
-            if(Default) Default = Item.Duplicate(Default);
-
-            if(inserted) inserted = Item.Duplicate(inserted);
-
-            if (!inserted && Default) inserted = Default;
-        }
-
-
         public void InsertItem(Item toInsert, out Item toRemove)
         {
-            if (Conditions(toInsert))
+            if(CanRemove(inserted) && CanInsert(toInsert))
             {
-                if (inserted == Default) toRemove = null;
+                if(inserted == Default) toRemove = null;
                 else toRemove = inserted;
 
-                if (toInsert) inserted = toInsert;
+                if(toInsert) inserted = toInsert;
                 else inserted = Default;
 
                 OnInsert(inserted);
-                OnWithDraw(toRemove);
+                OnWithdraw(toRemove);
             }
             else toRemove = null;
         }
 
 
-        bool Conditions(Item aAvaliar)
+        protected virtual bool CanInsert(Item toInsert) { return true; }
+        protected virtual bool CanRemove(Item toRemove) { return true; }
+
+        protected virtual void OnInsert(Item inserted) {    }
+
+        protected virtual void OnWithdraw(Item withdrawn) {     }
+
+        public override void OnDuplicate()
         {
-            return true;
-        }
-
-
-        protected virtual void OnInsert(Item toInsert)
-        {
-             
-        }
-
-
-        protected virtual void OnWithDraw(Item toWithDraw)
-        {
-
+            inserted = Item.Duplicate(inserted ? inserted : Default); 
         }
 
 

@@ -22,16 +22,16 @@ public struct Damage
         return new Damage(A.damage - B.damage);
     }
 
-    public Damage(int danos)
+    public Damage(int damage)
     {
-        this.damage = danos;
+        this.damage = damage;
     }
 
 #if UNITY_EDITOR
 
     public void Gui()
     {
-        damage = EditorGUILayout.IntField("Danos: ", damage);
+        damage = EditorGUILayout.IntField("Damage: ", damage);
     }
 
 #endif 

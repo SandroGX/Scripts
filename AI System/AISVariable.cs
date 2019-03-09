@@ -1,46 +1,43 @@
 ﻿using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using System.Collections;
 using System.Linq;
 using System;
-
+using System.Collections.Generic;
 
 namespace Game.AISystem
 {
     [Serializable]
-    public abstract class AISVariable : ScriptableObject, ISerializationCallbackReceiver
+    public abstract class AISVariable : ScriptableObject
     {
-        public Type type;
+        public string type;
         public bool isStatic;
 
-        #region Serialization
-        [SerializeField] string typeName;
-        public void OnAfterDeserialize()
-        {
-            type = Type.GetType(typeName);
-        }
-
-        public void OnBeforeSerialize()
-        {
-            if(type != null) typeName = type.FullName;
-        }
-        #endregion
+        public virtual void Init(AISController ctrl) { }
 
 #if UNITY_EDITOR
+
+        public AISVariable original;
 
         public void OnGui()
         {
             name = EditorGUILayout.TextField("Name", name);
 
-            EditorGUILayout.LabelField(this as AISVarList ? " List" : "Single");
+            EditorGUILayout.LabelField(VarType());
             isStatic = EditorGUILayout.Toggle("isStatic?", isStatic);
 
             if (type == null || !AISEditorUtil.allVarType.Contains(type)) type = AISEditorUtil.allVarType[0];
-            type = AISEditorUtil.allVarType[EditorGUILayout.Popup("Type:", AISEditorUtil.allVarType.IndexOf(type), AISEditorUtil.allVarType.Select(x => x.Name).ToArray())];
+            type = AISEditorUtil.allVarType[EditorGUILayout.Popup("Type:", AISEditorUtil.allVarType.IndexOf(type), GetVarTypes().Select(x => Type.GetType(x).Name).ToArray())];
+
+            if (isStatic) InspectorGui();
         }
 
-
         public abstract void InspectorGui();
+
+        protected abstract string VarType();
+        public abstract List<string> GetVarTypes();
 
 #endif
     }

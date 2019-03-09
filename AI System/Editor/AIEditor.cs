@@ -106,9 +106,12 @@ namespace Game.AISystem
             GUILayout.BeginArea(new Rect(0, topOffset, horDiv, height));
             GUILayout.BeginScrollView(scrollVar);
 
-            if (GUILayout.Button("Add Variable")) AddVar(false);
+            string s = "";
+            if (GUILayout.Button("Add Variable")) s = typeof(AISVarSingle).ToString();
+            if (GUILayout.Button("Add Variable List")) s = typeof(AISVarList).ToString();
+            if (GUILayout.Button("Add Variable Component")) s = typeof(AISVarComponent).ToString();
 
-            if (GUILayout.Button("Add Variable List")) AddVar(true);
+            if(s != "") AddVar((AISVariable)CreateInstance(s));
 
             for(int i = 0; i < ai.variables.Count; ++i)
             {
@@ -152,9 +155,8 @@ namespace Game.AISystem
         }
 
 
-        void AddVar(bool list)
+        void AddVar(AISVariable var)
         {
-            AISVariable var = list ? (AISVariable)CreateInstance<AISVarList>(): (AISVariable)CreateInstance<AISVarSingle>();
             var.name = "New Var";
             SODatabase.Add(ai, var, ai.variables);
         }
@@ -240,7 +242,7 @@ namespace Game.AISystem
         void InitializeAI()
         {
             
-            if(!AssetDatabase.Contains(ai)) AssetDatabase.CreateAsset(ai, "Assets/My Assets/AIs/" + ai.name + ".asset");
+            if(!AssetDatabase.Contains(ai)) AssetDatabase.CreateAsset(ai, "Assets/AIs/" + ai.name + ".asset");
 
             if (ai.root) InitializeActions(ai.root);
             else

@@ -20,9 +20,10 @@ namespace Game.InventorySystem
         public ItemHolder holder;
 
     
-
         public static Item Duplicate(Item toDuplicate)
         {
+            if (!toDuplicate) return null;
+
             Item duplicated = Instantiate(toDuplicate);
 
             duplicated.components.Clear();
@@ -54,7 +55,9 @@ namespace Game.InventorySystem
         {
             if (components.Count == 0) return null;
             if (components.Count == 1) return components[0] as T;
-            return components.Where(x => x is T).First() as T;
+            IEnumerable<ItemComponent> o = components.Where(x => x is T);//.First() as T;
+            if(o.Count() != 0) return o.First() as T;
+            return null;
         }
 
         public ItemComponent GetComponent(System.Type t)
@@ -64,11 +67,26 @@ namespace Game.InventorySystem
             return components.Where(x => x.GetType().Equals(t)).First();
         }
 
+        public ItemComponent GetComponent(string type) { return GetComponent(System.Type.GetType(type)); }
+
         public T[] GetComponents<T>() where T : ItemComponent
         {
             if (components.Count == 0) return null;
             if (components.Count == 1) return new T[] { components[0] as T };
             return components.Where(x => x is T).Select(x => x as T).ToArray();
+        }
+
+        public ItemComponent[] GetComponents(System.Type t)
+        {
+            if (components.Count == 0) return null;
+            return components.Where(x => x.GetType().Equals(t)).ToArray();
+        }
+
+        public ItemComponent[] GetComponents(string type)
+        {
+            if (components.Count == 0) return null;
+            System.Type t = System.Type.GetType(type);
+            return components.Where(x => x.GetType().Equals(t)).ToArray();
         }
 
 

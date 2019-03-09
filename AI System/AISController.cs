@@ -10,31 +10,31 @@ namespace Game.AISystem
     public class AISController : MonoBehaviour
     {
         public AISAI ai;
+        [HideInInspector] //public AISVarSet set;
+        Dictionary<AISVariable, AISVariable> set;
 
         [HideInInspector] public NavMeshAgent navAgent;
         [HideInInspector] public Motor motor;
-        public List<AISVariable> variables;
         
 
         void Awake()
         {
             motor = GetComponent<Motor>();
             navAgent = GetComponent<NavMeshAgent>();
-            Debug.Log("AAA");
-            SetAIVars(variables);
         }
 
 
         void Start()
         {
             if (motor) motor.MotorStart();
+
             if (navAgent)
             {
                 navAgent.updatePosition = false;
                 navAgent.updateRotation = false;
             }
 
-            ai.root.OnActionEnter(this);
+            ai.Begin(this);
         }
 
 
@@ -53,26 +53,25 @@ namespace Game.AISystem
             ai.root.OnActionExit(this);
         }
 
+        public bool ContainsKey(AISVariable key) { return set.ContainsKey(key); }
+        public AISVariable GetVar(AISVariable key) { return set[key]; }
 
-        public void SetAIVars(List<AISVariable> original)
+        public void MakeSet()
         {
-            List<AISVariable> n = new List<AISVariable>();
+            Dictionary<AISVariable, AISVariable> set = new Dictionary<AISVariable, AISVariable>();
 
-            foreach (AISVariable v in original)
+            foreach (AISVariable v in ai.variables)
             {
-                if (v.isStatic) n.Add(v);
+                if (v.isStatic) set.Add(v, v);
                 else
                 {
                     AISVariable c = Instantiate(v);
-                    n.Add(c);
+                    c.Init(this);
+                    set.Add(v, c);
                 }
             }
 
-            variables = n;
+            this.set = set;
         }
-
-
-        public AISVarSingle GetSingle(int idx) { return variables[idx] as AISVarSingle; }
-        public AISVarList GetList(int idx) { return variables[idx] as AISVarList; }
     }
 }

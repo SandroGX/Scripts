@@ -21,8 +21,8 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
-        if (GameManager.PLAYER != null && playerCharacterUI.character == null)
-            playerCharacterUI.character = GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();    
+        if (Game.GameManager.PLAYER != null && playerCharacterUI.character == null)
+            playerCharacterUI.character = Game.GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();    
     }
 
 

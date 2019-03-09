@@ -66,7 +66,7 @@ namespace Game.AISystem
             }
 
             if(!following)
-            coroutines.Add(ctrl, ctrl.StartCoroutine(ActionCoroutine(ctrl)));
+                coroutines.Add(ctrl, ctrl.StartCoroutine(ActionCoroutine(ctrl)));
 
             controllers.Add(ctrl);
         }

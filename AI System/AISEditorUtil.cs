@@ -9,27 +9,82 @@ namespace Game.AISystem
 {
     public static class AISEditorUtil
     {
-        public static T GetSingle<T>(AISController ctrl, int idx) where T : Object
+        public static int GetSingleInt<T>(AISController ctrl, AISVariable key)
         {
-            if (idx < 0 || idx >= ctrl.variables.Count) return null;
+            if (!ctrl.ContainsKey(key)) return 0;
 
-            AISVarSingle var = ctrl.GetSingle(idx);
-            if (!var) return null;
+            AISVarSingle var = (AISVarSingle)ctrl.GetVar(key);
+            return var.@int;
+        }
 
+        public static List<int> GetListInt(AISController ctrl, AISVariable key)
+        {
+            if (!ctrl.ContainsKey(key)) return null;
+
+            AISVarList vars = (AISVarList)ctrl.GetVar(key);
+            return vars.@int;
+        }
+
+        public static float GetSingleFloat(AISController ctrl, AISVariable key)
+        {
+            if (!ctrl.ContainsKey(key)) return 0;
+
+            AISVarSingle var = (AISVarSingle)ctrl.GetVar(key);
+            return var.@float;
+        }
+
+        public static List<float> GetListFloat(AISController ctrl, AISVariable key)
+        {
+            if (!ctrl.ContainsKey(key)) return null;
+
+            AISVarList vars = (AISVarList)ctrl.GetVar(key);
+            return vars.@float;
+        }
+
+        public static Vector3 GetSingleVector3(AISController ctrl, AISVariable key)
+        {
+            if (!ctrl.ContainsKey(key)) return Vector3.zero;
+
+            AISVarSingle var = (AISVarSingle)ctrl.GetVar(key);
+            return var.vector3;
+        }
+
+        public static List<Vector3> GetListVector3(AISController ctrl, AISVariable key)
+        {
+            if (!ctrl.ContainsKey(key)) return null;
+
+            AISVarList vars = (AISVarList)ctrl.GetVar(key);
+            return vars.vector3;
+        }
+
+        public static T GetSingleObject<T>(AISController ctrl, AISVariable key) where T : Object
+        {
+            if (!ctrl.ContainsKey(key)) return null;
+
+            AISVarSingle var = (AISVarSingle)ctrl.GetVar(key);
             return var.@object as T;
         }
 
-        public static List<T> GetList<T>(AISController ctrl, int idx) where T : Object
+        public static List<T> GetListObject<T>(AISController ctrl, AISVariable key) where T : Object
         {
-            if (idx < 0 || idx >= ctrl.variables.Count) return null;
+            if (!ctrl.ContainsKey(key)) return null;
 
-            AISVarList vars = ctrl.GetList(idx);
-            if (!vars) return null;
+            AISVarList vars = (AISVarList)ctrl.GetVar(key);
 
             List<T> list = vars.@object.Where(x => x is T).Select(x => (T)x).ToList();
             if (list == null || list.Count == 0) return null;
 
             return list;
+        }
+
+        public static T GetComponent<T>(AISController ctrl, AISVariable key) where T : Component
+        {
+            return ((AISVarComponent)ctrl.GetVar(key)).GetComponent<T>();
+        }
+
+        public static T GetItemComponent<T>(AISController ctrl, AISVariable key) where T : InventorySystem.ItemComponent
+        {
+            return ((AISVarComponent)ctrl.GetVar(key)).GetItemComponent<T>();
         }
 
 
@@ -39,43 +94,29 @@ namespace Game.AISystem
 
         public static List<System.Type> allScorers = System.Reflection.Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(AISScorer)) || x == typeof(AISScorer)).ToList();
 
-        public static List<System.Type> allVarType = new List<System.Type> { typeof(int), typeof(float), typeof(Vector3), typeof(GameObject), typeof(MotorSystem.MotorState), typeof(Hitbox) };
-            /*System.AppDomain.CurrentDomain.GetAssemblies().SelectMany(x => x.GetTypes()).
-            Where(x => (((x.IsSubclassOf(typeof(Component)) || x.IsValueType) && x.Namespace == "UnityEngine") || x.Namespace != null && x.Namespace.Contains("Game")) &&
-            x.Namespace != null && !x.Namespace.Contains("Editor") && !x.Name.Contains("Editor") || x == typeof(int) || x == typeof(Transform)).ToList();*/
+        public static List<string> allVarType = new List<string> { typeof(int).FullName, typeof(float).FullName, "UnityEngine.Transform, UnityEngine", typeof(MotorSystem.MotorState).FullName, typeof(Hitbox).FullName,
+        typeof(Character).FullName };
+            
 
-
-        public static void VarPopUp(string label, AISAI ai, ref int varIdx, bool list)
+        public static AISVariable VarPopUp(string label, AISAI ai, AISVariable var, System.Type t)
         {
-            List<AISVariable> options;
-            if (list) options = ai.variables.Where(x => x as AISVarList).ToList();
-            else options = ai.variables.Where(x => x as AISVarSingle).ToList();
-
-            Select(label, ai, ref varIdx, list, options);
+            return Select(label, ai, var, t, ai.variables.Where(x => x.GetType() == t).ToList());
         }
         
-        public static void VarPopUp(string label, AISAI ai, ref int varIdx, bool list, System.Type type)
+        public static AISVariable VarPopUp(string label, AISAI ai, AISVariable var, System.Type t, System.Type type)
         {
-            List<AISVariable> options;
-            if (list) options = ai.variables.Where(x => x as AISVarList && x.type.Equals(type)).ToList();
-            else options = ai.variables.Where(x => x as AISVarSingle && x.type.Equals(type)).ToList();
-
-            Select(label, ai, ref varIdx, list, options);
+            return Select(label, ai, var, t, ai.variables.Where(x => x.GetType() == t && System.Type.GetType(x.type).Equals(type)).ToList());
         }
 
-        private static void Select(string label, AISAI ai, ref int varIdx, bool list, List<AISVariable> options)
+        private static AISVariable Select(string label, AISAI ai, AISVariable var, System.Type t, List<AISVariable> options)
         {
             if (options != null && options.Count != 0)
             {
-                if (varIdx < 0 || varIdx >= ai.variables.Count) varIdx = 0;
-                AISVariable a = ai.variables[varIdx];
+                if (!ai.variables.Contains(var)) var = ai.variables[0];
 
-                if (!options.Contains(a)) a = options[0];
-
-                a = options[EditorGUILayout.Popup(label + (list ? "(List): " : "(Single) "), options.IndexOf(a), options.Select(x => x.name).ToArray())];
-                varIdx = ai.variables.IndexOf(a);
+                return options[EditorGUILayout.Popup(label + "(" + t + ")", options.IndexOf(var), options.Select(x => x.name).ToArray())];
             }
-            else { GUILayout.Label("There no Variable " + (list ? "Lists" : "Singles") + " and/or compatible types!"); varIdx = -1; }
+            else { GUILayout.Label("There no Variable " + "(" + t + ")" + " and/or compatible types!"); return null; }
         }
 #endif
     }
