@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public abstract class BiggerSmallerEqual : IfTrue

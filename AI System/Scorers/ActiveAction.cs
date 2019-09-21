@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.AISystem {
+namespace GX.AISystem {
     public class ActiveAction : IfTrue
     {
         protected override bool Evaluate(AISController ctrl)

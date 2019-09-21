@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using Game.VarSystem;
+using GX.VarSystem;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     public class StateMachineController : MonoBehaviour
     {

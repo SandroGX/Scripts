@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif 
 
-namespace Game.InventorySystem
+namespace GX.InventorySystem
 {
     [CreateAssetMenu(fileName = "New Item", menuName = "Item", order = 0)]
     [System.Serializable]

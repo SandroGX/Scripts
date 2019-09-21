@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     public class CCMotor : Motor
     {

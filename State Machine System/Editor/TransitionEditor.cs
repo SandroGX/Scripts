@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //editor for one or more transitions(with same start and end) in state machine
     public class TransitionEditor : SMElementEditor

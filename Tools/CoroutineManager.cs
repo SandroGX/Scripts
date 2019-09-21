@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game
+namespace GX
 {
     public static class CoroutineManager
     {

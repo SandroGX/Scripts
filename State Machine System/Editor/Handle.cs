@@ -3,7 +3,7 @@ using UnityEditor;
 using System;
 using System.Collections.Generic;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     [Serializable]
     public class Handle : SMElementEditor

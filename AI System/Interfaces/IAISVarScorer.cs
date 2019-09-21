@@ -3,7 +3,7 @@
 using UnityEditor;
 #endif
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public interface IAISVarScorer
     {

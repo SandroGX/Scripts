@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [System.Serializable]
     [CreateAssetMenu(fileName = "Basic Movement", menuName = "Motor/Basic Movement", order = 0)]

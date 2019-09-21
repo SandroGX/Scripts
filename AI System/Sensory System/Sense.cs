@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.AISystem.SensorySystem
+namespace GX.AISystem.SensorySystem
 {
     public abstract class Sense : MonoBehaviour
     {

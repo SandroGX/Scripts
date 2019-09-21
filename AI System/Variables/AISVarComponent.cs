@@ -1,11 +1,11 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Game.InventorySystem;
+using GX.InventorySystem;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class AISVarComponent : AISVariable
     {

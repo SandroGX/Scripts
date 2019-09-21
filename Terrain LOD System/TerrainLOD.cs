@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Game.TerrainLODSystem
+namespace GX.TerrainLODSystem
 {
     [ExecuteInEditMode]
     public class TerrainLOD : MonoBehaviour

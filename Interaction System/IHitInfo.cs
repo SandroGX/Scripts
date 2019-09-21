@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Game
+namespace GX
 {
     public interface IHitInfo
     {

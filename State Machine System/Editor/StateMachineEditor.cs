@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //state machine
     [System.Serializable]

@@ -6,7 +6,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class AIEditor : EditorWindow
     {

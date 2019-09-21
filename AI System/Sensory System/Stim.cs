@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.AISystem.SensorySystem
+namespace GX.AISystem.SensorySystem
 {
     public abstract class Stim : MonoBehaviour, IHitInfo
     {

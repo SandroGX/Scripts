@@ -4,7 +4,7 @@ using UnityEditor;
 #endif
 using System.Collections.Generic;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public class AISVarList : AISVariable

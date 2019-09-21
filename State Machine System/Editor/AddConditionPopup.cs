@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem {
+namespace GX.StateMachineSystem {
     //popup to add behaviour to state
     public class AddConditionPopup : PopupWindowContent
     {

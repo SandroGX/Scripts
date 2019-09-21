@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //a condition of a transition
     public abstract class TransitionCondition : ScriptableObject

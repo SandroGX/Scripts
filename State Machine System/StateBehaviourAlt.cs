@@ -1,6 +1,6 @@
 ﻿
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     public abstract class StateBehaviourAlt : StateBehaviourTicked
     {

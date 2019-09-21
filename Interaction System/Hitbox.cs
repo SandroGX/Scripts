@@ -2,7 +2,7 @@
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
-namespace Game
+namespace GX
 {
     [RequireComponent(typeof(Collider))]
     public class Hitbox : MonoBehaviour

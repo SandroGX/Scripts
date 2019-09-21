@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //how to show state in inspector
     [CustomEditor(typeof(TransitionEditor))]

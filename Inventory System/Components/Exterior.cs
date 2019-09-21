@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif 
 
-namespace Game.InventorySystem
+namespace GX.InventorySystem
 {
     [System.Serializable]
     public class Exterior : ItemComponent, IExterior

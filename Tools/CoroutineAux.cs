@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System;
 using System.Collections;
-using Game;
+using GX;
 
 public static class CoroutineAux
 {

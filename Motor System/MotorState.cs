@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.StateMachineSystem;
+using GX.StateMachineSystem;
 
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     public abstract class MotorState : StateBehaviour
     {

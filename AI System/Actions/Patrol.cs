@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public class Patrol : AISAction

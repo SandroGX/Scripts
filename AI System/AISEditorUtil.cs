@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public static class AISEditorUtil
     {

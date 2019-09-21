@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //transition in state machine
     [System.Serializable]

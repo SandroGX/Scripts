@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.MotorSystem;
+using GX.MotorSystem;
 
 public class Player : MonoBehaviour
 {
@@ -25,7 +25,7 @@ public class Player : MonoBehaviour
 
     void Awake()
     {
-       Game.GameManager.PLAYER = gameObject;
+       GX.GameManager.PLAYER = gameObject;
         motor = GetComponent<Motor>();
         playerCamera = Camera.main.GetComponent<PlayerCamera>();
         playerCamera.SetCamTarget(camTargetTransform);

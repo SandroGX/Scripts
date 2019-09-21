@@ -7,7 +7,7 @@ using System.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [Serializable]
     public abstract class AISVariable : ScriptableObject

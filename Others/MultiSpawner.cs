@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using Game.InventorySystem;
+using GX.InventorySystem;
 
 public class MultiSpawner : MonoBehaviour
 {

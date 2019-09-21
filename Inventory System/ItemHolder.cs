@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Game.InventorySystem
+namespace GX.InventorySystem
 {
     [AddComponentMenu("Inventario/Item Holder")]
     public class ItemHolder : MonoBehaviour

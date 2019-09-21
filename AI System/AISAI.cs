@@ -6,7 +6,7 @@ using UnityEditor;
 #endif
 
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public class AISAI : ScriptableObject

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     [System.Serializable]
     public class ConditionTest : TransitionCondition

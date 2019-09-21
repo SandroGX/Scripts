@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class Constant : AISScorer
     {

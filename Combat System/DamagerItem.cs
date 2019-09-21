@@ -1,4 +1,4 @@
-﻿using Game.InventorySystem;
+﻿using GX.InventorySystem;
 
 [System.Serializable]
 public class DamagerItem : ItemComponent, IDamager

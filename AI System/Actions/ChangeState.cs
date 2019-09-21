@@ -4,9 +4,9 @@ using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using Game.MotorSystem;
+using GX.MotorSystem;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public class ChangeState : AISAction

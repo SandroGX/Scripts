@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using Game.VarSystem;
+using GX.VarSystem;
 
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //state machine
     [System.Serializable]

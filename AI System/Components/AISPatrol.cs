@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEditor;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public abstract class AISPatrol : MonoBehaviour
     {

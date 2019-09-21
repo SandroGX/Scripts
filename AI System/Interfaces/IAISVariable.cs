@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public interface IAISVariable
     {

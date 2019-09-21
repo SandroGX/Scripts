@@ -1,6 +1,6 @@
-﻿using Game.InventorySystem;
+﻿using GX.InventorySystem;
 
-namespace Game.AISystem.SensorySystem
+namespace GX.AISystem.SensorySystem
 {
     public class ItemEntity : ItemComponent, IEntity
     {

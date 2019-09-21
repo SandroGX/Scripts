@@ -1,4 +1,4 @@
-﻿namespace Game.AISystem.SensorySystem
+﻿namespace GX.AISystem.SensorySystem
 {
     public interface IEntity
     {

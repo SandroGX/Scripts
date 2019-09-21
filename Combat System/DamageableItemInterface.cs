@@ -1,5 +1,5 @@
-﻿using Game;
-using Game.InventorySystem;
+﻿using GX;
+using GX.InventorySystem;
 
 public class DamageableItemInterface : ItemComponentInterface<DamageableItem>
 {

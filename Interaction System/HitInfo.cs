@@ -1,4 +1,4 @@
-﻿namespace Game
+﻿namespace GX
 {
     public class HitInfo<T> : IHitInfo
     {

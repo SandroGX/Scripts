@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //a state
     [System.Serializable]

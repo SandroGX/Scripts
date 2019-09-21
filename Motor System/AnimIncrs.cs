@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Game.MotorSystem;
+using GX.MotorSystem;
 
 [CreateAssetMenu(fileName = "AnimIncrs", menuName = "Motor/AnimIncrs", order = 2)]
 public class AnimIncrs : AnimState

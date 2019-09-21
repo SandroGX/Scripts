@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.InventorySystem
+namespace GX.InventorySystem
 {
     public interface IExterior
     {

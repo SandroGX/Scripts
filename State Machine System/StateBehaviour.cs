@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //A behaviour of a state
     public abstract class StateBehaviour : ScriptableObject

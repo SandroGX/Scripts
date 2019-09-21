@@ -1,4 +1,4 @@
-﻿using Game.InventorySystem;
+﻿using GX.InventorySystem;
 
 public class DamageableItem : ItemComponent, IDamageable, IExterior
 {

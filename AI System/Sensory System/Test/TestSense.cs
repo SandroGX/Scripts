@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-namespace Game.AISystem.SensorySystem
+namespace GX.AISystem.SensorySystem
 {
     public class TestSense : Sense<TestStim>
     {

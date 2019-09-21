@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
-using Game.MotorSystem;
+using GX.MotorSystem;
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [CreateAssetMenu(fileName = "Instant Accelaration", menuName = "Motor/Instant Accelaration", order = 1)]
     public class InstantAccelaration : MotorState

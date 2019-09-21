@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [CreateAssetMenu(fileName = "CCJump", menuName = "Motor/CharacterController/Jump", order = 2)]
     public class CCJump : CCAccelaration

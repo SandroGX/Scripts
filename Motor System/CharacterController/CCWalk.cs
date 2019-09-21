@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [CreateAssetMenu(fileName = "CCWalk", menuName = "Motor/CharacterController/Walk", order = 0)]
     public class CCWalk : BasicMovement

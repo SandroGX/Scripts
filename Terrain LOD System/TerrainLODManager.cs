@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Game.TerrainLODSystem
+namespace GX.TerrainLODSystem
 {
     public class TerrainLODManager : MonoBehaviour
     {

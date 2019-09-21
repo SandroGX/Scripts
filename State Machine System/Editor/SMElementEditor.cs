@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //inherit if doing a element editor
     public abstract class SMElementEditor : ScriptableObject

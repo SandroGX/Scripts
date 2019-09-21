@@ -5,7 +5,7 @@ using UnityEditor;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class AISVarSelector : AISAction
     {

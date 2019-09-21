@@ -2,7 +2,7 @@
 using UnityEngine.AI;
 using System.Collections;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class PatrolAgent : MonoBehaviour
     {

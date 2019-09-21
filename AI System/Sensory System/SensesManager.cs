@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Game.AISystem.SensorySystem
+namespace GX.AISystem.SensorySystem
 {
     [RequireComponent(typeof(Hitbox))]
     public class SensesManager : MonoBehaviour, IHitboxMessageTarget

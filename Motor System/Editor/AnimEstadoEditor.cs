@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
-using Game.MotorSystem;
+using GX.MotorSystem;
 
 public class AnimEstadoEditor : Editor
 {

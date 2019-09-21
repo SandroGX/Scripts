@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     public abstract class Motor : MonoBehaviour
     {

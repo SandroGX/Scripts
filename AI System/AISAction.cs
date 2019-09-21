@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     [System.Serializable]
     public partial class AISAction : ScriptableObject

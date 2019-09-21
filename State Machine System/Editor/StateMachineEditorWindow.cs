@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     public class StateMachineEditorWindow : EditorWindow
     {

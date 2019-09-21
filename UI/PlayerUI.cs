@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Game.InventorySystem;
+using GX.InventorySystem;
 
 public class PlayerUI : MonoBehaviour
 {
@@ -21,8 +21,8 @@ public class PlayerUI : MonoBehaviour
 
     void Update()
     {
-        if (Game.GameManager.PLAYER != null && playerCharacterUI.character == null)
-            playerCharacterUI.character = Game.GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();    
+        if (GX.GameManager.PLAYER != null && playerCharacterUI.character == null)
+            playerCharacterUI.character = GX.GameManager.PLAYER.GetComponent<ItemHolder>().item.GetComponent<Character>();    
     }
 
 

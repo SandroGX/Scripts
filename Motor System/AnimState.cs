@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [CreateAssetMenu(fileName = "Anim", menuName = "Motor/Anim", order = 0)]
     public class AnimState : MotorState

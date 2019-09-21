@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEditor;
 
-namespace Game.InventorySystem
+namespace GX.InventorySystem
 {
     public class ItemEditor : EditorWindow
     {

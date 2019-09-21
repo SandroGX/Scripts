@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.VarSystem
+namespace GX.VarSystem
 {
     [System.Serializable]
     public class VarHandleTemplate : IEnumerable<Variable>

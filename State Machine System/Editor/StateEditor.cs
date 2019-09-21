@@ -2,7 +2,7 @@
 using UnityEditor;
 using System.Collections.Generic;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     //editor representing a state
     public class StateEditor : SMElementEditor

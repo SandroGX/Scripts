@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using Game.MotorSystem;
-using Game.InventorySystem;
+using GX.MotorSystem;
+using GX.InventorySystem;
 
-namespace Game.AISystem
+namespace GX.AISystem
 {
     public class AISController : MonoBehaviour
     {

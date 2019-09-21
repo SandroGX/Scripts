@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Game.StateMachineSystem
+namespace GX.StateMachineSystem
 {
     [System.Serializable]
     public class StateBhvTickedTest : StateBehaviourTicked

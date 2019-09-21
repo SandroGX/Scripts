@@ -1,4 +1,4 @@
-﻿namespace Game.StateMachineSystem
+﻿namespace GX.StateMachineSystem
 {
     public abstract class StateBehaviourTicked : StateBehaviour
     {

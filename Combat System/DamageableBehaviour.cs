@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using Game;
+using GX;
 
 public class DamageableBehaviour : MonoBehaviour, IDamageable
 {

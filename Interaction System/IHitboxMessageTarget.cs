@@ -1,7 +1,7 @@
 ﻿using UnityEngine.EventSystems;
 using UnityEditor;
 
-namespace Game
+namespace GX
 {
     public interface IHitboxMessageTarget : IEventSystemHandler
     {

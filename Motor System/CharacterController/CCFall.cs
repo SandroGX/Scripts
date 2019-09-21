@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Game.MotorSystem
+namespace GX.MotorSystem
 {
     [CreateAssetMenu(fileName = "CCFall", menuName = "Motor/CharacterController/Fall", order = 1)]
     public class CCFall : BasicMovement

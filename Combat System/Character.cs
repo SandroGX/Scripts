@@ -2,8 +2,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif 
-using Game.MotorSystem;
-using Game.InventorySystem;
+using GX.MotorSystem;
+using GX.InventorySystem;
 
 [System.Serializable]
 public class Character : ItemComponent, IExterior
