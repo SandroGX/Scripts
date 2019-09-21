@@ -26,7 +26,6 @@ namespace Game.AISystem
 
         void Start()
         {
-            if (motor) motor.MotorStart();
 
             if (navAgent)
             {

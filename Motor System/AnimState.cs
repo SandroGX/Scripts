@@ -10,12 +10,15 @@ namespace Game.MotorSystem
         public Anim[] conditions;
 
 
-        public override void Construct(Motor motor)
+        public override void OnStateEnter(Motor motor)
         {
-            base.Construct(motor);
             PlayConditions(motor);
         }
 
+        public override void OnStateExit(Motor motor)
+        {
+            throw new System.NotImplementedException();
+        }
 
         public override void ProcessMovement(Motor motor)
         {

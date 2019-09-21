@@ -1,22 +1,51 @@
 ﻿using UnityEngine;
-using UnityEditor;
+using Game.VarSystem;
 
 namespace Game.StateMachineSystem
 {
-    public class StateMachineController : MonoBehaviour, ISMClient
+    public class StateMachineController : MonoBehaviour
     {
         public StateMachine stateMachine;
-        public StateMachine StateMachine { get { return stateMachine; } }
-        public State Current { get; set; }
 
-        private void Start()
+        public SMClient Client { get; private set; }
+
+        private void Awake()
         {
-            stateMachine.StartSM(this);
+            Client = stateMachine.CreateClient(this);
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            stateMachine.UpdateSM(this);
+            Client.StartSM();
+        }
+
+        private void OnDisable()
+        {
+            Client.StopSM();
+        }
+
+        private void OnDestroy()
+        {
+            Client.StopSM();
+        }
+    }
+
+    public class VarComponent : Variable
+    {
+        public System.Type compType;
+
+        public override Variable Duplicate(object varHolder)
+        {
+            if (isStatic)
+            {
+                if(va == null)
+
+                return this;
+            }
+
+            VarComponent v = CreateInstance<VarComponent>();
+            v.va = ((Component)varHolder).GetComponent(compType);
+            return v;
         }
     }
 }

@@ -14,52 +14,31 @@ namespace Game.MotorSystem
         public Animator anim;
         [HideInInspector]
         public NavMeshAgent navAgent;
-        [HideInInspector]
-        public Rigidbody rigidBody;
-        [HideInInspector]
-        public Character character;
 
         [HideInInspector]
-        public Vector3 input, lookDir, target, rawPlatformVelocity, rawPlatformAngVelocity;
+        public Vector3 input, lookDir, target;
         [HideInInspector]
-        public Vector3 velocity, movementVelocity, platformVelocity, fallVelocity; //in meters/fixedUpdate
+        public Vector3 velocity; //in meters/second
         [HideInInspector]
-        public Vector3 angularVelocity, movementAngVelocity, platformAngVelocity; //in angles/fixedUpdate
-        public Vector3 gravity = Physics.gravity, surfaceNormal;
+        public Vector3 angularVelocity; //in angles/second
+        public Vector3 gravity = Physics.gravity;
 
         [HideInInspector]
-        public bool isStarted, processedOnce, isGrounded, lookAtTarget;
-        public float surfaceStaticFriction, surfaceDynamicFriction;
+        public bool processedOnce, lookAtTarget;
 
-
-        public MotorState currentState;
-        public MotorState nextState;
-        [SerializeField]
-        public MotorState defaultState;
+        public GroundInfo groundInfo;
 
 
         protected virtual void Awake()
         {
             anim = GetComponent<Animator>();
             navAgent = GetComponent<NavMeshAgent>();
-            rigidBody = GetComponent<Rigidbody>();
         } 
-
-
-        public virtual void MotorStart()
-        {
-            character = GetComponent<InventorySystem.ItemHolder>().item.GetComponent<Character>();
-
-            isStarted = true;
-
-            currentState = defaultState;
-            currentState.Construct(this);
-        }
 
 
         public virtual void FixedUpdate()
         {
-            if (isStarted) MotorUpdate();
+            MotorUpdate();
         }
 
 
@@ -68,35 +47,18 @@ namespace Game.MotorSystem
             OnGround();
             SetLookDir();
 
-            currentState.ProcessMovement(this); processedOnce = true;
+            processedOnce = true;
 
-            CalculateTotalMov();
             ApplyMov();
 
-            anim.SetFloat("Velocity", velocity.magnitude / Time.fixedDeltaTime);
-            anim.SetFloat("Angular Velocity", angularVelocity.y / Time.fixedDeltaTime);
-            anim.SetBool("C == N", currentState == nextState);
+            anim.SetFloat("Velocity", velocity.magnitude);
+            anim.SetFloat("Angular Velocity", angularVelocity.y);
 
             //Debug.DrawRay(transform.position, velocity / Time.fixedDeltaTime, Color.yellow);
         }
 
-        protected virtual void CalculateTotalMov()
-        {
-            velocity = movementVelocity + platformVelocity + fallVelocity;
-            angularVelocity = movementAngVelocity + platformAngVelocity;
-        }
+        
         protected abstract void ApplyMov();
-
-
-        public void ChangeState(MotorState state)
-        {
-            if (!state || currentState == state) return;
-            
-            currentState.Deconstruct(this);
-            currentState = state;
-            currentState.Construct(this);
-            processedOnce = false;
-        }
 
 
         public void AnimationEnd()
@@ -105,7 +67,7 @@ namespace Game.MotorSystem
         }
 
 
-        public virtual void OnGround() { isGrounded = false; surfaceNormal = rawPlatformVelocity = rawPlatformAngVelocity = Vector3.zero; surfaceStaticFriction = surfaceDynamicFriction = 1; }
+        public void OnGround() {  }
 
 
         protected virtual void SetLookDir()
@@ -113,37 +75,30 @@ namespace Game.MotorSystem
             lookDir = transform.forward;
         }
 
-
-        public void InputOnSurface()
-        {
-            if (surfaceNormal != Vector3.zero)
-            {
-                Vector3 s = Vector3.ProjectOnPlane(surfaceNormal, Vector3.Cross(input, gravity));
-                input = Vector3.ProjectOnPlane(input, s).normalized * input.magnitude;
-
-                //Debug.DrawRay(transform.position, input, Color.red);
-            }
-        }
-
     }
 
     public struct Mov
     {
-        Vector3 vel;
-        Vector3 acel;
+        private Vector3 vel;
+        private Vector3 acel;
 
-        public Vector3 Vel{ get { return vel; } }
-        public Vector3 Acel { set { acel = value; vel += value; } }
+        public Vector3 Vel{ get { return vel; } set { acel = value - vel;  vel = value; } }
+        public Vector3 Acel { get { return acel; } set { acel = value; vel += value; } }
 
         public Mov(Vector3 vel, Vector3 acel)
         {
             this.vel = vel;
             this.acel = acel;
         }
+    }
 
-        public static Mov operator+(Mov A, Mov B)
-        {
-            return new Mov(A.vel + B.vel, A.acel + B.acel);
-        }
+    public struct GroundInfo
+    {
+        public bool isGrounded;
+        public Vector3 surfaceNormal;
+        public Vector3 platformVel;
+        public Vector3 platformAngVel;
+        public float surfaceStaticFriction;
+        public float surfaceDynamicFriction;
     }
 }

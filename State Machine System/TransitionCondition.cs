@@ -7,7 +7,7 @@ namespace Game.StateMachineSystem
     public abstract class TransitionCondition : ScriptableObject
     {
         //is condition met
-        public abstract bool ConditionMet(ISMClient client);
+        public abstract bool ConditionMet(SMClient client);
 
         //start evaluating?
 

@@ -9,9 +9,19 @@ namespace Game.MotorSystem
     {
         public float accelaration = 5;
 
+        public override void OnStateEnter(Motor motor)
+        {
+            motor.velocity += motor.input * accelaration;
+        }
+
+        public override void OnStateExit(Motor motor)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void ProcessMovement(Motor motor)
         {
-            motor.movementVelocity += motor.input * accelaration * Time.fixedDeltaTime;
+            throw new System.NotImplementedException();
         }
     }
 }

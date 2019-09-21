@@ -1,18 +1,17 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 namespace Game.StateMachineSystem
 {
     //A behaviour of a state
     public abstract class StateBehaviour : ScriptableObject
     {
-        //initialization 
-        //uncomment when doing editor
-        //public abstract void Init();
-
         //what it does on entering state
-        public abstract void OnStateEnter(ISMClient client);
+        public virtual void OnStateEnter(SMClient client) { }
         //what it does on leaving state
-        public abstract void OnStateExit(ISMClient client);
+        public virtual void OnStateExit(SMClient client) { }
+        //what it does when client is stopped
+        public virtual void OnClientStop(SMClient client) { }
+        //what it does when client is started with this behaviour in current state
+        public virtual void OnClientStart(SMClient client) { }
     }
 }

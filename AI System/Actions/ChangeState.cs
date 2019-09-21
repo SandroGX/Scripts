@@ -17,14 +17,14 @@ namespace Game.AISystem
         public override void OnActionEnter(AISController controller)
         {
             base.OnActionEnter(controller);
-            controller.motor.nextState = state;
+            //controller.motor.nextState = state;
         }
 
 
         public override void OnAction(AISController controller)
         {
             base.OnAction(controller);
-            if (controller.motor.currentState != state) controller.motor.nextState = state;
+            //if (controller.motor.currentState != state) controller.motor.nextState = state;
         }
 
 #if UNITY_EDITOR

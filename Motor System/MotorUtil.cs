@@ -41,19 +41,12 @@ namespace Game.MotorSystem
             return crrVel + acelDes;
         }
 
-        public static Mov MovUniVar(Mov crrMov, Vector3 desVel, float minVel, float maxVel, float minAcel, float maxAcel, float time)
+        public static Vector3 MovUniVarDir(Vector3 crrVel, Vector3 desVel, float minVel, float maxVel, float minAcel, float maxAcel)
         {
-            return MovUniVar(crrMov, desVel * time, minVel * time, maxVel * time, minAcel * time * time, maxAcel * time * time);
-        }
+            Vector3 dir = Vector3.Project(crrVel, desVel);
 
-        public static Vector3 MovUniVar(Vector3 crrVel, Vector3 desVel, float minVel, float maxVel, float minAcel, float maxAcel, float time)
-        {
-            return MovUniVar(crrVel, desVel * time, minVel * time, maxVel * time, minAcel * time * time, maxAcel * time * time);
-        }
-
-        public static float MovUniVar(float crrVel, float desVel, float minVel, float maxVel, float minAcel, float maxAcel, float time)
-        {
-            return MovUniVar(crrVel, desVel * time, minVel * time, maxVel * time, minAcel * time * time, maxAcel * time * time);
+            crrVel -= dir;
+            return crrVel + MovUniVar(dir, desVel, minVel, maxVel, minAcel, maxAcel);
         }
 
    
@@ -85,11 +78,20 @@ namespace Game.MotorSystem
             return toKill - Vector3.Project(toKill, killer);
         }
 
-        public static void KillVelocities(Motor motor, Vector3 killer)
+        public static Vector3 InputOnSurface(Vector3 input, Vector3 surfaceNormal, Vector3 gravity)
         {
-            motor.movementVelocity = KillVector(motor.movementVelocity, killer);
-            motor.platformVelocity = KillVector(motor.platformVelocity, killer);
-            motor.fallVelocity = KillVector(motor.fallVelocity, killer);
+            if (surfaceNormal != Vector3.zero)
+            {
+                Vector3 s = Vector3.ProjectOnPlane(surfaceNormal, Vector3.Cross(input, gravity));
+                input = Vector3.ProjectOnPlane(input, s).normalized * input.magnitude;
+            }
+
+            return input;
+        }
+
+        public static void MotorInputOnSurface(Motor motor)
+        {
+            motor.input = InputOnSurface(motor.input, motor.groundInfo.surfaceNormal, motor.gravity);
         }
     }
 }

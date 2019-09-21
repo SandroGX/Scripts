@@ -7,12 +7,24 @@ namespace Game
     public class GameManager : MonoBehaviour
     {
         public static GameObject PLAYER;
-        public static float STAT_VAR_TIME = 0.2f;
-        public static GameManager instance;
+        private static GameManager instance;
+        public static GameManager Instance
+        {
+            get
+            {
+                if (!instance)
+                {
+                    GameObject go = new GameObject("Game Manager");
+                    DontDestroyOnLoad(go);
+                    instance = go.AddComponent<GameManager>();
+                }
+                return instance;
+            }
+        }
 
         private void Awake()
         {
-            if (instance == null)
+            if (!instance)
             {
                 instance = this;
                 DontDestroyOnLoad(gameObject);
@@ -22,12 +34,12 @@ namespace Game
 
         public static Coroutine StartCoroutineGM(IEnumerator coroutine)
         {
-            return instance.StartCoroutine(coroutine);
+            return Instance.StartCoroutine(coroutine);
         }
 
         public static void StopCoroutineGM(Coroutine coroutine)
         {
-            instance.StopCoroutine(coroutine);
+            Instance.StopCoroutine(coroutine);
         }
     }
 }

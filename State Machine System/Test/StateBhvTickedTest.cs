@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
-using UnityEditor;
 
 namespace Game.StateMachineSystem
 {
     [System.Serializable]
-    [CreateAssetMenu(fileName = "State Bhv Ticked Test", menuName = "State Machine/State Bhv Ticked Test", order = 0)]
     public class StateBhvTickedTest : StateBehaviourTicked
     {
         public string test;
 
-        protected override void OnState(ISMClient client)
+        public GenericYieldInstructionGetter yield;
+        protected override object YieldInstruction { get => new WaitForSeconds(1);/*yield.GetYieldInstruction();*/ }
+
+        protected override void OnState(SMClient client)
         {
             Debug.Log("Tick: " + test);
         }

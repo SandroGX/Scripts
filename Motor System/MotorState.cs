@@ -1,30 +1,30 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Game.StateMachineSystem;
 
 
-namespace Game.MotorSystem {
-    public abstract class MotorState : ScriptableObject
+namespace Game.MotorSystem
+{
+    public abstract class MotorState : StateBehaviour
     {
-        public bool animExit;
-        public Anim[] animConditions;
-
-
-        [SerializeField]
-        public List<MotorState> passiveStates = new List<MotorState>();
-
+       
         public abstract void ProcessMovement(Motor motor);
 
-
-        public virtual void Construct(Motor motor)
+        public override void OnStateEnter(SMClient client)
         {
-            foreach (Anim a in animConditions) a.SetParam(motor.anim);
+            //if (client is MonoBehaviour)
+                //OnStateEnter(((MonoBehaviour)client).GetComponent<Motor>());
         }
 
-
-        public virtual void Deconstruct(Motor motor)
+        public override void OnStateExit(SMClient client)
         {
-            foreach (Anim a in animConditions) a.ResetParam(motor.anim);
+            //if (client is MonoBehaviour)
+                //OnStateExit(((MonoBehaviour)client).GetComponent<Motor>());
         }
+
+        public abstract void OnStateEnter(Motor motor);
+
+        public abstract void OnStateExit(Motor motor);
     }
 }

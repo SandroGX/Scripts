@@ -24,25 +24,27 @@ namespace Game.MotorSystem
         
         public override void ProcessMovement(Motor motor)
         {
-            float vel = motor.movementVelocity.magnitude / Time.fixedDeltaTime;
+            float vel = motor.velocity.magnitude / Time.fixedDeltaTime;
             float crrMinVel = (!ignorePrevVel && vel < minVel) ? vel : minVel;
             float crrMaxVel = (!ignorePrevVel && vel > maxVel) ? vel : maxVel;
 
             Vector3 velDes;
             if (motor.input != Vector3.zero) velDes = motor.input * crrMaxVel;
-            else if(motor.movementVelocity != Vector3.zero) velDes = motor.movementVelocity.normalized * crrMinVel;
+            else if(motor.velocity != Vector3.zero) velDes = motor.velocity.normalized * crrMinVel;
             else velDes = motor.lookDir * crrMinVel;
 
-            motor.movementVelocity = MotorUtil.MovUniVar(motor.movementVelocity, velDes, crrMinVel, crrMaxVel, minAcel, maxAcel, Time.fixedDeltaTime);
+            motor.velocity = MotorUtil.MovUniVar(motor.velocity, velDes, crrMinVel, crrMaxVel, minAcel, maxAcel);
         }
 
 
-        public override void Construct(Motor motor)
+        public override void OnStateEnter(Motor motor)
         {
-            base.Construct(motor);
-           
-            //motor.platformVelocity = motor.fallVelocity = Vector3.zero; //caused problem with other classes
             MotorUtil.NavAgent(motor, this);
+        }
+
+        public override void OnStateExit(Motor motor)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

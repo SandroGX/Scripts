@@ -4,7 +4,6 @@ using UnityEditor;
 namespace Game.StateMachineSystem
 {
     [System.Serializable]
-    [CreateAssetMenu(fileName = "State Behaviour Test", menuName = "State Machine/State Behaviour Test", order = 0)]
     public class StateBehaviourTest : StateBehaviour
     {
         public string test;
@@ -16,14 +15,14 @@ namespace Game.StateMachineSystem
         }
         */
 
-        public override void OnStateEnter(ISMClient client)
+        public override void OnStateEnter(SMClient client)
         {
             Debug.Log("Hi, entered. " + test);
         }
 
-        public override void OnStateExit(ISMClient client)
+        public override void OnStateExit(SMClient client)
         {
-            Debug.Log("Bye, left" + test);
+            Debug.Log("Bye, left. " + test);
         }
     }
 }

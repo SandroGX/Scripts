@@ -9,7 +9,7 @@ namespace Game.MotorSystem
 
         public override void ProcessMovement(Motor motor)
         {
-            motor.InputOnSurface();
+            MotorUtil.MotorInputOnSurface(motor);
             base.ProcessMovement(motor);
         }
     }

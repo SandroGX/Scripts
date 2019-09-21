@@ -9,7 +9,7 @@ using UnityEditor;
 namespace Game.AISystem
 {
     [System.Serializable]
-    public class AISAction : ScriptableObject
+    public partial class AISAction : ScriptableObject
     {
         #region Engine
         public AISAI ai;

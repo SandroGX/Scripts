@@ -9,23 +9,19 @@ namespace Game.MotorSystem
     {
 
         public float jumpHeight = 4;
-        public int staminaVarInst;
        
         public override void ProcessMovement(Motor motor)
         {
             float jumpVel = Mathf.Sqrt(-2 * -motor.gravity.magnitude * jumpHeight);
-            motor.fallVelocity = -motor.gravity.normalized * jumpVel * Time.fixedDeltaTime;
+            motor.velocity += -motor.gravity.normalized * jumpVel * Time.fixedDeltaTime;
 
             base.ProcessMovement(motor);  
         }
 
 
-        public override void Construct(Motor motor)
+        public override void OnStateEnter(Motor motor)
         {
-            base.Construct(motor);
-            motor.movementVelocity += motor.platformVelocity;
-            motor.platformVelocity = motor.fallVelocity = motor.movementAngVelocity = motor.platformAngVelocity = Vector3.zero; 
-            motor.character.stamina.Add(-staminaVarInst);
+            base.OnStateEnter(motor);
         }
     }
 }

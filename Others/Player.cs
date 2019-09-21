@@ -14,7 +14,6 @@ public class Player : MonoBehaviour
     PlayerCamera playerCamera;
     public Transform camTargetTransform;
 
-    public Control[] controls;
     [HideInInspector]
     public float time;
 
@@ -30,15 +29,12 @@ public class Player : MonoBehaviour
         motor = GetComponent<Motor>();
         playerCamera = Camera.main.GetComponent<PlayerCamera>();
         playerCamera.SetCamTarget(camTargetTransform);
-        foreach (Control c in controls) c.player = this;
-        //character = GetComponent<Game.SistemaInventario.ItemHolder>().item.GetComponent<Character>();
-        //ui = GameObject.Find("PlayerUI").GetComponent<PlayerUI>();
     }
 
 
     void Start()
     {
-        motor.MotorStart();
+        
     }
 
 
@@ -56,7 +52,6 @@ public class Player : MonoBehaviour
         motor.target = transform.position + i;
 
         time += Time.deltaTime;
-        foreach (Control c in controls) c.Action(motor);
     }
 
 

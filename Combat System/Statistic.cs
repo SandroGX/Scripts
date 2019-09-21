@@ -4,6 +4,8 @@ using UnityEngine;
 [System.Serializable]
 public class Statistic
 {
+    public static float STAT_VAR_TIME = 0.2f;
+
     public float value, minValue, maxValue, varValue;
     public System.Action Min, Max;
 
@@ -48,9 +50,9 @@ public class Statistic
     {
         while (true)
         {
-            value += varValue * Game.GameManager.STAT_VAR_TIME;
+            value += varValue * STAT_VAR_TIME;
             Limits();
-            yield return new WaitForSeconds(Game.GameManager.STAT_VAR_TIME);
+            yield return new WaitForSeconds(STAT_VAR_TIME);
         }
 
     }
